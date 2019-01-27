@@ -1,0 +1,12 @@
+default: &default
+  encoding: utf8mb4
+  adapter: mysql2
+
+development:
+  <<: *default
+  database: act_bl_bot
+  port:
+  username:
+  password:
+  pool:     10
+  host:     127.0.0.1
