@@ -1,0 +1,16 @@
+# Copy this file to /lib/systemd/system/ folder
+[Unit]
+Description=actblbot
+
+[Service]
+Type=simple
+User=root
+
+Restart=on-failure
+RestartSec=10
+
+WorkingDirectory=/home/tommy/go/src/github.com/bot/act-bl-bot
+ExecStart=/home/tommy/go/src/github.com/bot/act-bl-bot/actblbot
+
+[Install]
+WantedBy=multi-user.target

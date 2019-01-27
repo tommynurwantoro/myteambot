@@ -1,7 +1,7 @@
 .env
 db/config.yml
 vendor/*
-bot
+actblbot
 
 # Binaries for programs and plugins
 *.exe
