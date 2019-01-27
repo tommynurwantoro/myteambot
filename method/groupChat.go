@@ -11,7 +11,7 @@ import (
 func GroupChat(update tgbotapi.Update, groupSessionKey string, groupState int) string {
 	if groupState == utility.RedisState["init"] {
 		args := update.Message.CommandArguments()
-		switch update.Message.CommandWithAt() {
+		switch update.Message.Command() {
 		case "start":
 			return text.Start()
 		case "help":
