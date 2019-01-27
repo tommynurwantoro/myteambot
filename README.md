@@ -29,7 +29,7 @@ Telegram bot for some activities in ACT (my team)
 - Install MySQL  
   See [MySQL Installation](https://www.mysql.com/downloads/)
   
-- Install Redis
+- Install Redis  
   See [Redis Installation](https://redis.io/topics/quickstart)
 
 - Clone this repo in your local at `$GOPATH/src/github.com/bot`
