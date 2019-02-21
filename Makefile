@@ -4,10 +4,10 @@ dep:
 pretty:
 	gofmt -s -w .
 
-bin: pretty dep
+build: pretty dep
 	go build -o actblbot app/act-bl-bot/main.go
 
-run: bin
+run: build
 	./actblbot
 
 deploy:
