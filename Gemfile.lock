@@ -28,7 +28,6 @@ GEM
     builder (3.2.3)
     concurrent-ruby (1.1.4)
     crass (1.0.4)
-    daemons (1.2.3)
     erubi (1.8.0)
     i18n (1.5.1)
       concurrent-ruby (~> 1.0)
@@ -69,7 +68,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  daemons
   mysql2
   standalone_migrations
 
