@@ -4,7 +4,6 @@ import (
 	"github.com/bot/act-bl-bot/app"
 	"github.com/bot/act-bl-bot/text"
 	"github.com/bot/act-bl-bot/utility"
-	"github.com/bot/act-bl-bot/utility/mysql"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -21,30 +20,11 @@ func PrivateChat(update tgbotapi.Update, userSessionKey string, userState int) s
 		case "halo":
 			return text.Halo(update.Message.From.UserName)
 		case "retro":
-			eligible := mysql.IsUserEligible(update.Message.From.UserName)
-			if eligible == true {
-				err := app.Redis.Set(userSessionKey, utility.RedisState["retro"], 0).Err()
-				if err != nil {
-					panic(err)
-				}
-				return text.StartRetro()
-			}
-			return "Kamu belum bisa ikutan retro, coba hubungin @tommynurwantoro"
+			return StartRetro(update, userSessionKey)
 		case "result_retro":
-			if args == "" {
-				return text.InvalidDate()
-			}
-			results := mysql.GetResultRetro(args)
-			return "Ini hasil retro untuk tanggal " + args + "\n\n" + text.GenerateRetroResult(results)
+			return ResultRetro(args)
 		case "add_user":
-			if args != "" {
-				if mysql.IsAdmin(update.Message.From.UserName) {
-					mysql.InsertOneUser(args)
-					return "User " + args + " udah aku masukin nih biar bisa ikut retrospective juga kayak kamu."
-				}
-
-				return "Kamu gak boleh pakai perintah ini, ngomong dulu ke @tommynurwantoro ya"
-			}
+			return AddUser(update, args)
 		default:
 			return text.InvalidCommand()
 		}
@@ -53,29 +33,13 @@ func PrivateChat(update tgbotapi.Update, userSessionKey string, userState int) s
 		case "help":
 			return text.StartRetro()
 		case "glad":
-			if args == "" {
-				return text.InvalidRetroMessage()
-			}
-			mysql.InsertMessageRetro(update.Message.From.UserName, "glad", args)
-			return text.SuccessInsertMessage()
+			return InsertRetroMessage(update, "glad", args)
 		case "sad":
-			if args == "" {
-				return text.InvalidRetroMessage()
-			}
-			mysql.InsertMessageRetro(update.Message.From.UserName, "sad", args)
-			return text.SuccessInsertMessage()
+			return InsertRetroMessage(update, "sad", args)
 		case "mad":
-			if args == "" {
-				return text.InvalidRetroMessage()
-			}
-			mysql.InsertMessageRetro(update.Message.From.UserName, "mad", args)
-			return text.SuccessInsertMessage()
+			return InsertRetroMessage(update, "mad", args)
 		case "result_retro":
-			if args == "" {
-				return text.InvalidDate()
-			}
-			results := mysql.GetResultRetro(args)
-			return "Ini hasil retro untuk tanggal " + args + "\n\n" + text.GenerateRetroResult(results)
+			return ResultRetro(args)
 		case "end_retro":
 			err := app.Redis.Set(userSessionKey, utility.RedisState["init"], 0).Err()
 			if err != nil {

@@ -3,7 +3,6 @@ package method
 import (
 	"github.com/bot/act-bl-bot/text"
 	"github.com/bot/act-bl-bot/utility"
-	"github.com/bot/act-bl-bot/utility/mysql"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -19,13 +18,9 @@ func GroupChat(update tgbotapi.Update, groupSessionKey string, groupState int) s
 		case "halo":
 			return text.Halo(update.Message.From.UserName)
 		case "retro":
-			return "Kalau mau retro DM aku aja ya, biar anonymous hasilnya. 😄"
+			return "Kalau mau retro DM aku aja ya, biar gak diliat yang lain. 😄"
 		case "result_retro":
-			if args == "" {
-				return text.InvalidRetroMessage()
-			}
-			results := mysql.GetResultRetro(args)
-			return "Ini hasil retro untuk tanggal " + args + "\n\n" + text.GenerateRetroResult(results)
+			return ResultRetro(args)
 		default:
 			return text.InvalidCommand()
 		}
