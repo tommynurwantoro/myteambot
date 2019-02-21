@@ -7,8 +7,8 @@ import (
 	"github.com/bot/act-bl-bot/entity"
 )
 
-// GetOneUser _
-func GetOneUser(username string) entity.User {
+// FindUserByUsername _
+func FindUserByUsername(username string) entity.User {
 	user := entity.User{}
 	err := app.MysqlClient.QueryRow("SELECT * FROM users WHERE username = ?", username).Scan(&user.ID, &user.Username, &user.IsAdmin)
 	if err != nil {
@@ -20,7 +20,7 @@ func GetOneUser(username string) entity.User {
 
 // IsUserEligible _
 func IsUserEligible(username string) bool {
-	user := GetOneUser(username)
+	user := FindUserByUsername(username)
 	if user == (entity.User{}) {
 		return false
 	}
@@ -30,7 +30,7 @@ func IsUserEligible(username string) bool {
 
 // IsAdmin _
 func IsAdmin(username string) bool {
-	user := GetOneUser(username)
+	user := FindUserByUsername(username)
 	if user == (entity.User{}) {
 		return false
 	}
@@ -50,23 +50,8 @@ func InsertOneUser(username string) {
 
 // FirstOrCreateUser _
 func FirstOrCreateUser(username string) {
-	user := FindUserByUsernameAndGroupID(username)
+	user := FindUserByUsername(username)
 	if user == (entity.User{}) {
 		InsertOneUser(username)
 	}
-}
-
-// FindUserByUsernameAndGroupID _
-func FindUserByUsernameAndGroupID(username string) entity.User {
-	user := entity.User{}
-	err := app.
-		MysqlClient.
-		QueryRow("SELECT * FROM users WHERE username = ?", username).
-		Scan(&user.ID, &user.Username, &user.IsAdmin)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	return user
 }
