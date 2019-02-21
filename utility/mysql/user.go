@@ -47,3 +47,26 @@ func InsertOneUser(username string) {
 		panic(err)
 	}
 }
+
+// FirstOrCreateUser _
+func FirstOrCreateUser(username string) {
+	user := FindUserByUsernameAndGroupID(username)
+	if user == (entity.User{}) {
+		InsertOneUser(username)
+	}
+}
+
+// FindUserByUsernameAndGroupID _
+func FindUserByUsernameAndGroupID(username string) entity.User {
+	user := entity.User{}
+	err := app.
+		MysqlClient.
+		QueryRow("SELECT * FROM users WHERE username = ?", username).
+		Scan(&user.ID, &user.Username, &user.IsAdmin)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return user
+}
