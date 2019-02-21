@@ -33,7 +33,7 @@ func StartRetro() string {
 		"Silakan gunakan perintah di bawah ini yaa:\n" +
 		"/glad pesan kamu\n" +
 		"/sad pesan kamu\n" +
-		"/sad pesan kamu\n\n" +
+		"/mad pesan kamu\n\n" +
 		"Tenang aja hasilnya anonymous kok.\n" +
 		"Untuk mendapatkan hasilnya, kamu bisa gunakan perintah /result_retro dd-mm-yyyy\n" +
 		"Untuk menghentikan sesi retro ini, kamu bisa gunakan perintah /end_retro`\n"
