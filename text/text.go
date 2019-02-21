@@ -1,10 +1,14 @@
 package text
 
-import "github.com/bot/act-bl-bot/entity"
+import (
+	"strings"
+
+	"github.com/bot/act-bl-bot/entity"
+)
 
 // Start _
 func Start() string {
-	return "Halo! Bot ini dibuat oleh Tommy (@tommynurwantoro).\nCoba gunakan /help untuk melihat perintah-perintah yang tersedia."
+	return "Halo!!\nCoba gunakan /help untuk melihat perintah-perintah yang tersedia.\nKalau ada yang bingung coba hubungi @tommynurwantoro aja"
 }
 
 // Help _
@@ -14,7 +18,7 @@ func Help() string {
 
 // Halo _
 func Halo(username string) string {
-	return "Halo, " + username + ". 👋🏻"
+	return "Halo, @" + username + ". 👋🏻"
 }
 
 // InvalidCommand _
@@ -75,6 +79,11 @@ func GenerateRetroResult(results []entity.Retro) string {
 	}
 
 	return glad + sad + mad
+}
+
+// SuccessAddMember _
+func SuccessAddMember(usernames []string) string {
+	return "Berhasil menambahkan " + strings.Join(usernames[:], ", ")
 }
 
 // Private //
