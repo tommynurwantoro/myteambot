@@ -30,7 +30,7 @@ func main() {
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 			log.Printf("%+v", update.Message.Chat)
 
-			if update.Message.Chat.Type == "group" || update.Message.Chat.Type == "supergroup" {
+			if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
 				log.Printf("Group chat")
 				groupSessionKey := "bot_group_session:" + strconv.FormatInt(update.Message.Chat.ID, 10)
 
