@@ -38,8 +38,6 @@ func ResultRetro(args string) string {
 	if args == "" {
 		year, month, day := time.Now().Date()
 		args = fmt.Sprintf("%d-%02d-%d", day, int(month), year)
-		results := mysql.GetResultRetro(args)
-		return "Ini hasil retro untuk tanggal " + args + "\n\n" + text.GenerateRetroResult(results)
 	}
 
 	results := mysql.GetResultRetro(args)
