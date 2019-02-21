@@ -86,6 +86,11 @@ func SuccessAddMember(usernames []string) string {
 	return "Berhasil menambahkan " + strings.Join(usernames[:], ", ")
 }
 
+// InvalidParameter _
+func InvalidParameter() string {
+	return "Parameternya belum bener tuh, coba dicek lagi ya"
+}
+
 // Private //
 
 func commands() string {

@@ -1,8 +1,8 @@
 package method
 
 import (
+	"github.com/bot/act-bl-bot/text"
 	"github.com/bot/act-bl-bot/utility/mysql"
-	"github.com/bot/bukarehatbot/text"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
