@@ -21,7 +21,7 @@ func StartRetro(update tgbotapi.Update, userSessionKey string) string {
 		}
 		return text.StartRetro()
 	}
-	return "Kamu belum bisa ikutan retro, coba hubungin @tommynurwantoro"
+	return text.UserNotEligible()
 }
 
 // InsertRetroMessage _

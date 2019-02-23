@@ -6,14 +6,19 @@ import (
 	"github.com/bot/act-bl-bot/entity"
 )
 
+// UserNotEligible _
+func UserNotEligible() string {
+	return "Kamu belum bisa ikutan retro, coba hubungin @tommynurwantoro"
+}
+
 // Start _
 func Start() string {
-	return "Halo!!\nCoba gunakan /help untuk melihat perintah-perintah yang tersedia.\nKalau ada yang bingung coba hubungi @tommynurwantoro aja"
+	return "Halo!!\nIni botnya tim ACT.\nCoba gunakan /help untuk melihat perintah-perintah yang tersedia ya.\nKalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
 }
 
 // Help _
-func Help() string {
-	return "Kamu bisa gunakan perintah-perintah ini loh:\n" + commands()
+func Help(commands string) string {
+	return "Kamu bisa gunakan perintah-perintah ini loh:\n" + commands
 }
 
 // Halo _
@@ -40,7 +45,7 @@ func StartRetro() string {
 		"/mad pesan kamu\n\n" +
 		"Tenang aja hasilnya anonymous kok.\n" +
 		"Untuk mendapatkan hasilnya, kamu bisa gunakan perintah /result_retro dd-mm-yyyy\n" +
-		"Untuk menghentikan sesi retro ini, kamu bisa gunakan perintah /end_retro`\n"
+		"Untuk menghentikan sesi retro ini, kamu bisa gunakan perintah /end_retro\n"
 }
 
 // SuccessInsertMessage _
@@ -91,10 +96,17 @@ func InvalidParameter() string {
 	return "Parameternya belum bener tuh, coba dicek lagi ya"
 }
 
-// Private //
+// SuccessInsertData _
+func SuccessInsertData() string {
+	return "OK!"
+}
 
-func commands() string {
-	return "/halo Cuma buat nyapa aja\n" +
-		"/retro Buat masuk ke sesi retrospective\n" +
-		"/result_retro dd-mm-yyyy Buat dapet hasil retrospective, jangan lupa kasih tanggalnya ya"
+// SuccessUpdateData _
+func SuccessUpdateData() string {
+	return "Updated!"
+}
+
+// InvalidSequece _
+func InvalidSequece() string {
+	return "Gak bisa, gak ada di list"
 }
