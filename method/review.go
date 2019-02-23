@@ -2,6 +2,7 @@ package method
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/bot/act-bl-bot/text"
 	"github.com/bot/act-bl-bot/utility/mysql"
@@ -10,6 +11,10 @@ import (
 // GetReviewQueue _
 func GetReviewQueue() string {
 	reviews := mysql.GetAllNeedReviews()
+
+	if len(reviews) == 0 {
+		return "Gak ada antrian review nih 👍🏻"
+	}
 
 	return "Ini antrian review tim kamu:\n" + GenerateAllNeedReviews(reviews)
 }
@@ -27,12 +32,25 @@ func AddReview(url string) string {
 
 // UpdateDoneReview _
 func UpdateDoneReview(args string) string {
-	sequence, err := strconv.Atoi(args)
-	if err != nil {
+	if args == "" {
 		return text.InvalidParameter()
 	}
 
-	success := mysql.UpdateToDone(sequence)
+	sequences := strings.Split(args, " ")
+	success := false
+	updated := 0
+
+	for _, seq := range sequences {
+		sequence, err := strconv.Atoi(seq)
+		if err != nil {
+			continue
+		}
+
+		if mysql.UpdateToDone(sequence - updated) {
+			updated++
+			success = true
+		}
+	}
 
 	if success {
 		return text.SuccessUpdateData()
