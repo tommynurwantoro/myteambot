@@ -1,26 +1,67 @@
 package method
 
 import (
+	"strconv"
+
+	"github.com/bot/act-bl-bot/app"
 	"github.com/bot/act-bl-bot/text"
 	"github.com/bot/act-bl-bot/utility"
+	"github.com/bot/act-bl-bot/utility/mysql"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
+// GroupCommands List all commands
+var GroupCommands = []Command{
+	{"start", "Tentang bot ini"},
+	{"help", "Nampilin semua perintah yang ada"},
+	{"halo", "Cuma buat nyapa aja"},
+	{"retro", "Masuk ke sesi retrospective"},
+	{"result_retro", "{dd-mm-yyyy} Dapetin hasil retrospective, jangan lupa kasih tanggalnya ya"},
+	{"titip_review", "{url} Titip review PR"},
+	{"antrian_review", "Nampilin semua antrian PR yang belum direview"},
+	{"sudah_direview", "{urutan} Ngubah antrian review untuk yang sudah direview"},
+}
+
 // GroupChat _
-func GroupChat(update tgbotapi.Update, groupSessionKey string, groupState int) string {
+func GroupChat(update tgbotapi.Update) string {
+	if !mysql.IsUserEligible(update.Message.From.UserName) {
+		return text.UserNotEligible()
+	}
+
+	groupSessionKey := "bot_group_session:" + strconv.FormatInt(update.Message.Chat.ID, 10)
+
+	// Set redis if key not exist
+	if app.Redis.Exists(groupSessionKey).Val() == 0 {
+		err := app.Redis.Set(groupSessionKey, utility.RedisState["init"], 0).Err()
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	groupState, err := strconv.Atoi(app.Redis.Get(groupSessionKey).Val())
+	if err != nil {
+		panic(err)
+	}
+
 	if groupState == utility.RedisState["init"] {
 		args := update.Message.CommandArguments()
 		switch update.Message.Command() {
-		case "start":
+		case GroupCommands[0].Name: //start
 			return text.Start()
-		case "help":
-			return text.Help()
-		case "halo":
+		case GroupCommands[1].Name: //help
+			return text.Help(GenerateAllCommands(GroupCommands))
+		case GroupCommands[2].Name: //halo
 			return text.Halo(update.Message.From.UserName)
-		case "retro":
+		case GroupCommands[3].Name: //retro
 			return "Kalau mau retro DM aku aja ya, biar gak diliat yang lain. 😄"
-		case "result_retro":
+		case GroupCommands[4].Name: //result_retro
 			return ResultRetro(args)
+		case GroupCommands[5].Name: //titip_review
+			return AddReview(args)
+		case GroupCommands[6].Name: //antrian_review
+			return GetReviewQueue()
+		case GroupCommands[7].Name: //sudah_direview
+			return UpdateDoneReview(args)
 		default:
 			return text.InvalidCommand()
 		}
