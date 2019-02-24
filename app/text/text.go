@@ -3,7 +3,7 @@ package text
 import (
 	"strings"
 
-	"github.com/bot/act-bl-bot/entity"
+	"github.com/bot/act-bl-bot/app/models"
 )
 
 // UserNotEligible _
@@ -69,17 +69,17 @@ func EndRetro() string {
 }
 
 // GenerateRetroResult _
-func GenerateRetroResult(results []entity.Retro) string {
+func GenerateRetroResult(results []*models.Retro) string {
 	glad := "Glad:\n"
 	sad := "\nSad:\n"
 	mad := "\nMad:\n"
 	for _, result := range results {
 		if result.Type == "mad" {
-			mad += "- " + result.Message + "\n"
+			mad += "- " + result.Message.String + "\n"
 		} else if result.Type == "sad" {
-			sad += "- " + result.Message + "\n"
+			sad += "- " + result.Message.String + "\n"
 		} else {
-			glad += "- " + result.Message + "\n"
+			glad += "- " + result.Message.String + "\n"
 		}
 	}
 

@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/bot/act-bl-bot/app"
-	"github.com/bot/act-bl-bot/method"
+	"github.com/bot/act-bl-bot/app/method"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -38,6 +38,4 @@ func main() {
 			app.Bot.Send(msg)
 		}
 	}
-
-	defer app.MysqlClient.Close()
 }

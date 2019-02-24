@@ -3,14 +3,15 @@ package mysql
 import (
 	"log"
 
-	"github.com/bot/act-bl-bot/app"
-	"github.com/bot/act-bl-bot/entity"
+	"github.com/volatiletech/sqlboiler/boil"
+
+	"github.com/bot/act-bl-bot/app/models"
+	"github.com/volatiletech/sqlboiler/queries/qm"
 )
 
 // FindUserByUsername _
-func FindUserByUsername(username string) entity.User {
-	user := entity.User{}
-	err := app.MysqlClient.QueryRow("SELECT * FROM users WHERE username = ?", username).Scan(&user.ID, &user.Username, &user.IsAdmin)
+func FindUserByUsername(username string) *models.User {
+	user, err := models.Users(qm.Where("username = ?", username)).OneG()
 	if err != nil {
 		log.Println(err)
 	}
@@ -21,7 +22,7 @@ func FindUserByUsername(username string) entity.User {
 // IsUserEligible _
 func IsUserEligible(username string) bool {
 	user := FindUserByUsername(username)
-	if user == (entity.User{}) {
+	if user == nil {
 		return false
 	}
 
@@ -31,7 +32,7 @@ func IsUserEligible(username string) bool {
 // IsAdmin _
 func IsAdmin(username string) bool {
 	user := FindUserByUsername(username)
-	if user == (entity.User{}) {
+	if user == nil {
 		return false
 	}
 
@@ -40,9 +41,11 @@ func IsAdmin(username string) bool {
 
 // InsertOneUser _
 func InsertOneUser(username string) {
-	_, err := app.MysqlClient.Exec(
-		"INSERT INTO users(username, is_admin) VALUES(?, ?)",
-		username, false)
+	var user models.User
+
+	user.Username = username
+
+	err := user.InsertG(boil.Infer())
 	if err != nil {
 		panic(err)
 	}
@@ -51,7 +54,7 @@ func InsertOneUser(username string) {
 // FirstOrCreateUser _
 func FirstOrCreateUser(username string) {
 	user := FindUserByUsername(username)
-	if user == (entity.User{}) {
+	if user == nil {
 		InsertOneUser(username)
 	}
 }

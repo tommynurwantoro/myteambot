@@ -5,9 +5,9 @@ import (
 	"strconv"
 
 	"github.com/bot/act-bl-bot/app"
-	"github.com/bot/act-bl-bot/text"
-	"github.com/bot/act-bl-bot/utility"
-	"github.com/bot/act-bl-bot/utility/mysql"
+	"github.com/bot/act-bl-bot/app/text"
+	"github.com/bot/act-bl-bot/app/utility"
+	"github.com/bot/act-bl-bot/app/utility/mysql"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 

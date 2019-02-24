@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bot/act-bl-bot/text"
-	"github.com/bot/act-bl-bot/utility/mysql"
+	"github.com/bot/act-bl-bot/app/text"
+	"github.com/bot/act-bl-bot/app/utility/mysql"
 )
 
 // GetReviewQueue _

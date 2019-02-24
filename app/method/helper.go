@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/bot/act-bl-bot/entity"
+	"github.com/bot/act-bl-bot/app/models"
 )
 
 // Command _
@@ -29,7 +29,7 @@ func GetUsernames(usernames string) []string {
 }
 
 // GenerateAllNeedReviews _
-func GenerateAllNeedReviews(reviews []entity.Review) string {
+func GenerateAllNeedReviews(reviews []*models.Review) string {
 	var buffer bytes.Buffer
 
 	for i, review := range reviews {

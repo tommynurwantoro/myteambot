@@ -1,5 +1,7 @@
 package app
 
+//go:generate sqlboiler --wipe --add-global-variants --no-tests --no-context --no-rows-affected mysql
+
 import (
 	"bytes"
 	"database/sql"
@@ -8,16 +10,15 @@ import (
 	"sync"
 
 	"github.com/go-redis/redis"
+	"github.com/volatiletech/sqlboiler/boil"
 
 	// Mysql
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/joho/godotenv"
 )
-
-// MysqlClient _
-var MysqlClient *sql.DB
 
 // Redis _
 var Redis *redis.Client
@@ -36,13 +37,13 @@ func init() {
 	}
 
 	once.Do(func() {
-		MysqlClient = resolveMysql()
+		resolveMysql()
 		Redis = resolveRedis()
 		Bot = resolveBot()
 	})
 }
 
-func resolveMysql() *sql.DB {
+func resolveMysql() {
 	var b bytes.Buffer
 
 	b.WriteString(os.Getenv("DATABASE_USERNAME"))
@@ -59,7 +60,7 @@ func resolveMysql() *sql.DB {
 
 	log.Printf("Mysql Loaded")
 
-	return mysqlClient
+	boil.SetDB(mysqlClient)
 }
 
 func resolveBot() *tgbotapi.BotAPI {
