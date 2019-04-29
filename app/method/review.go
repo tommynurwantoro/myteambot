@@ -1,6 +1,7 @@
 package method
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -16,7 +17,7 @@ func GetReviewQueue() string {
 		return "Gak ada antrian review nih 👍🏻"
 	}
 
-	return "Ini antrian review tim kamu:\n" + GenerateAllNeedReviews(reviews)
+	return fmt.Sprintf("Ini antrian review tim kamu:\n%s", GenerateAllNeedReviews(reviews))
 }
 
 // AddReview _
@@ -53,7 +54,7 @@ func UpdateDoneReview(args string) string {
 	}
 
 	if success {
-		return text.SuccessUpdateData()
+		return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetReviewQueue())
 	}
 
 	return text.InvalidSequece()
