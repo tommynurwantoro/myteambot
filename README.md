@@ -40,7 +40,7 @@ Telegram bot for some activities in ACT (my team)
   git@github.com:tommynurwantoro/act-bl-bot.git
   ```
 
-- Go to Kingsman directory, then sync the vendor file
+- Go to act_bl_bot directory, then sync the vendor file
 
   ```sh
   cd $GOPATH/src/github.com/bot/act-bl-bot
@@ -51,6 +51,12 @@ Telegram bot for some activities in ACT (my team)
 
   ```sh
   cp env.sample .env
+  ```
+
+- Copy db/config.yml.sample and if necessary, modify the config file
+
+  ```sh
+  cp db/config.yml.sample db/config.yml
   ```
 
 - Install Bundler
