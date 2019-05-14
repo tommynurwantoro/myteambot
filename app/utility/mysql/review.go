@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"log"
+	"strings"
 
 	"github.com/volatiletech/sqlboiler/boil"
 
@@ -31,11 +32,13 @@ func GetAllReviewed() []*models.Review {
 }
 
 // InsertReview _
-func InsertReview(url string) {
+func InsertReview(title string, url string, users string) {
 	var review models.Review
 
 	review.URL = url
 	review.IsDone = false
+	review.Title = title
+	review.Users = users
 
 	err := review.InsertG(boil.Infer())
 	if err != nil {
@@ -44,12 +47,21 @@ func InsertReview(url string) {
 }
 
 // UpdateToDone _
-func UpdateToDone(sequence int) bool {
+func UpdateToDone(sequence int, user string, force bool) bool {
 	reviews := GetAllNeedReviews()
 
 	for i, review := range reviews {
 		if i == sequence-1 {
-			review.IsDone = true
+			if force {
+				review.Users = ""
+			} else {
+				review.Users = removeAvailableUsers(review.Users, user)
+			}
+
+			if review.Users == "" {
+				review.IsDone = true
+			}
+
 			err := review.UpdateG(boil.Infer())
 			if err != nil {
 				panic(err)
@@ -60,4 +72,19 @@ func UpdateToDone(sequence int) bool {
 	}
 
 	return false
+}
+
+func removeAvailableUsers(users string, deleteUser string) string {
+	splitUsers := strings.Split(users, " ")
+	var newUsers []string
+
+	for _, user := range splitUsers {
+		if user == deleteUser {
+			continue
+		} else {
+			newUsers = append(newUsers, user)
+		}
+	}
+
+	return strings.Join(newUsers, " ")
 }
