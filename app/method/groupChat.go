@@ -7,7 +7,7 @@ import (
 	"github.com/bot/act-bl-bot/app/text"
 	"github.com/bot/act-bl-bot/app/utility"
 	"github.com/bot/act-bl-bot/app/utility/mysql"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 // GroupCommands List all commands
@@ -17,9 +17,10 @@ var GroupCommands = []Command{
 	{"halo", "Cuma buat nyapa aja"},
 	{"retro", "Masuk ke sesi retrospective"},
 	{"result_retro", "{dd-mm-yyyy} Dapetin hasil retrospective, jangan lupa kasih tanggalnya ya"},
-	{"titip_review", "{url} Titip review PR"},
+	{"titip_review", "{title#url#telegram-users} Titip review PR"},
 	{"antrian_review", "Nampilin semua antrian PR yang belum direview"},
 	{"sudah_direview", "{urutan} Ngubah antrian review untuk yang sudah direview"},
+	{"sudah_direview_semua", "{urutan} Ngubah antrian review untuk yang sudah direview untuk semua user"},
 }
 
 // GroupChat _
@@ -61,7 +62,9 @@ func GroupChat(update tgbotapi.Update) string {
 		case GroupCommands[6].Name: //antrian_review
 			return GetReviewQueue()
 		case GroupCommands[7].Name: //sudah_direview
-			return UpdateDoneReview(args)
+			return UpdateDoneReview(args, update.Message.From.UserName, false)
+		case GroupCommands[8].Name: //sudah_direview_semua
+			return UpdateDoneReview(args, update.Message.From.UserName, true)
 		default:
 			return text.InvalidCommand()
 		}

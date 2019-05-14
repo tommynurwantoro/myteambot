@@ -21,18 +21,24 @@ func GetReviewQueue() string {
 }
 
 // AddReview _
-func AddReview(url string) string {
-	if url == "" {
+func AddReview(args string) string {
+	if args == "" {
 		return text.InvalidParameter()
 	}
 
-	mysql.InsertReview(url)
+	split := strings.Split(args, "#")
+
+	if len(split) < 3 {
+		return text.InvalidParameter()
+	}
+
+	mysql.InsertReview(split[0], split[1], split[2])
 
 	return text.SuccessInsertData()
 }
 
 // UpdateDoneReview _
-func UpdateDoneReview(args string) string {
+func UpdateDoneReview(args string, username string, force bool) string {
 	if args == "" {
 		return text.InvalidParameter()
 	}
@@ -47,7 +53,7 @@ func UpdateDoneReview(args string) string {
 			continue
 		}
 
-		if mysql.UpdateToDone(sequence - updated) {
+		if mysql.UpdateToDone(sequence-updated, fmt.Sprintf("@%s", username), force) {
 			updated++
 			success = true
 		}
