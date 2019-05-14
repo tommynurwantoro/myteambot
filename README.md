@@ -9,6 +9,7 @@ Telegram bot for some activities in ACT (my team)
 ## Onboarding and Development Guide
 
 ### Prerequisite
+
 - Git
 - Go 1.11 or later
 - Go Dep 0.5 or later
