@@ -33,7 +33,11 @@ func GenerateAllNeedReviews(reviews []*models.Review) string {
 	var buffer bytes.Buffer
 
 	for i, review := range reviews {
-		buffer.WriteString(fmt.Sprintf("%d. %s\n", i+1, review.URL))
+		if review.Title == "" {
+			buffer.WriteString(fmt.Sprintf("%d. [Belum ada title](%s) %s\n", i+1, review.URL, review.Users))
+		} else {
+			buffer.WriteString(fmt.Sprintf("%d. [%s](%s) %s\n", i+1, review.Title, review.URL, review.Users))
+		}
 	}
 
 	return buffer.String()
