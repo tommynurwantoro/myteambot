@@ -34,9 +34,9 @@ func GenerateAllNeedReviews(reviews []*models.Review) string {
 
 	for i, review := range reviews {
 		if review.Title == "" {
-			buffer.WriteString(fmt.Sprintf("%d. [Belum ada title](%s) %s\n", i+1, review.URL, review.Users))
+			buffer.WriteString(fmt.Sprintf("%d. <a href='%s'>Belum ada title</a> %s\n", i+1, review.URL, review.Users))
 		} else {
-			buffer.WriteString(fmt.Sprintf("%d. [%s](%s) %s\n", i+1, review.Title, review.URL, review.Users))
+			buffer.WriteString(fmt.Sprintf("%d. <a href='%s'>%s</a> %s\n", i+1, review.URL, review.Title, review.Users))
 		}
 	}
 

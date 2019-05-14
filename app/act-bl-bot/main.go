@@ -35,7 +35,7 @@ func main() {
 				msg.Text = method.PrivateChat(update)
 			}
 
-			msg.ParseMode = "Markdown"
+			msg.ParseMode = "HTML"
 
 			app.Bot.Send(msg)
 		}
