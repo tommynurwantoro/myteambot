@@ -2,6 +2,7 @@
 db/config.yml
 vendor/*
 actblbot
+tmp
 
 # Binaries for programs and plugins
 *.exe
