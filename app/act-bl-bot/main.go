@@ -5,7 +5,7 @@ import (
 
 	"github.com/bot/act-bl-bot/app"
 	"github.com/bot/act-bl-bot/app/method"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 func main() {
@@ -34,6 +34,8 @@ func main() {
 			} else {
 				msg.Text = method.PrivateChat(update)
 			}
+
+			msg.ParseMode = "Markdown"
 
 			app.Bot.Send(msg)
 		}
