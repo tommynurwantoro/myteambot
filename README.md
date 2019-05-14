@@ -37,7 +37,7 @@ Telegram bot for some activities in ACT (my team)
   If you don't have directory `src`, `github.com`, or `bot` in your GOPATH, please make them.
 
   ```sh
-  git@github.com:tommynurwantoro/act-bl-bot.git
+  git clone git@github.com:tommynurwantoro/act-bl-bot.git
   ```
 
 - Go to act_bl_bot directory, then sync the vendor file
