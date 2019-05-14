@@ -27,6 +27,8 @@ type Review struct {
 	IsDone    bool      `boil:"is_done" json:"is_done" toml:"is_done" yaml:"is_done"`
 	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	Title     string    `boil:"title" json:"title" toml:"title" yaml:"title"`
+	Users     string    `boil:"users" json:"users" toml:"users" yaml:"users"`
 
 	R *reviewR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L reviewL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -38,12 +40,16 @@ var ReviewColumns = struct {
 	IsDone    string
 	CreatedAt string
 	UpdatedAt string
+	Title     string
+	Users     string
 }{
 	ID:        "id",
 	URL:       "url",
 	IsDone:    "is_done",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
+	Title:     "title",
+	Users:     "users",
 }
 
 // Generated where
@@ -63,12 +69,16 @@ var ReviewWhere = struct {
 	IsDone    whereHelperbool
 	CreatedAt whereHelpertime_Time
 	UpdatedAt whereHelpertime_Time
+	Title     whereHelperstring
+	Users     whereHelperstring
 }{
 	ID:        whereHelperuint{field: `id`},
 	URL:       whereHelperstring{field: `url`},
 	IsDone:    whereHelperbool{field: `is_done`},
 	CreatedAt: whereHelpertime_Time{field: `created_at`},
 	UpdatedAt: whereHelpertime_Time{field: `updated_at`},
+	Title:     whereHelperstring{field: `title`},
+	Users:     whereHelperstring{field: `users`},
 }
 
 // ReviewRels is where relationship names are stored.
@@ -88,8 +98,8 @@ func (*reviewR) NewStruct() *reviewR {
 type reviewL struct{}
 
 var (
-	reviewColumns               = []string{"id", "url", "is_done", "created_at", "updated_at"}
-	reviewColumnsWithoutDefault = []string{"url", "is_done", "created_at", "updated_at"}
+	reviewColumns               = []string{"id", "url", "is_done", "created_at", "updated_at", "title", "users"}
+	reviewColumnsWithoutDefault = []string{"url", "is_done", "created_at", "updated_at", "title", "users"}
 	reviewColumnsWithDefault    = []string{"id"}
 	reviewPrimaryKeyColumns     = []string{"id"}
 )
