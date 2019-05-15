@@ -22,6 +22,7 @@ var PrivateCommands = []Command{
 	{"antrian_review", "Nampilin semua antrian PR yang belum direview"},
 	{"sudah_direview", "{urutan} Ngubah antrian review untuk yang sudah direview"},
 	{"sudah_direview_semua", "{urutan} Ngubah antrian review untuk yang sudah direview untuk semua user"},
+	{"tambah_user_review", "{urutan#users} Nambahin user ke antrian review"},
 }
 
 // PrivateChat _
@@ -66,6 +67,8 @@ func PrivateChat(update tgbotapi.Update) string {
 			return UpdateDoneReview(args, update.Message.From.UserName, false)
 		case PrivateCommands[8].Name: //sudah_direview_semua
 			return UpdateDoneReview(args, update.Message.From.UserName, true)
+		case PrivateCommands[9].Name: //tambah_user_review
+			return AddUserReview(args)
 		case "add_user":
 			return AddUser(update, args)
 		default:

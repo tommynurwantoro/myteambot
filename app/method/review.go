@@ -65,3 +65,28 @@ func UpdateDoneReview(args string, username string, force bool) string {
 
 	return text.InvalidSequece()
 }
+
+func AddUserReview(args string) string {
+	if args == "" {
+		return text.InvalidParameter()
+	}
+
+	split := strings.Split(args, "#")
+
+	sequence, err := strconv.Atoi(split[0])
+
+	if len(split) < 2 || err != nil {
+		return text.InvalidParameter()
+	}
+
+	reviews := mysql.GetAllNeedReviews()
+
+	for i, review := range reviews {
+		if i+1 == sequence {
+			mysql.UpdateReview(review.ID, review.Title, review.URL, fmt.Sprintf("%s %s", review.Users, split[1]))
+			return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetReviewQueue())
+		}
+	}
+
+	return text.InvalidSequece()
+}
