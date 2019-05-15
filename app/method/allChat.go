@@ -16,7 +16,7 @@ var AllCommands = []Command{
 	{"antrian_review", "Nampilin semua antrian PR yang belum direview"},
 	{"sudah_direview", "{urutan} Ngubah antrian review untuk yang sudah direview"},
 	{"sudah_direview_semua", "{urutan} Ngubah antrian review untuk yang sudah direview untuk semua user"},
-	{"tambah_user_review", "{urutan#users} Nambahin user ke antrian review"},
+	{"tambah_user_review", "{urutan#telegram-users} Nambahin user ke antrian review"},
 }
 
 // AllChat _
