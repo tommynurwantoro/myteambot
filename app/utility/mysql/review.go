@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"database/sql"
 	"log"
 	"strings"
 
@@ -41,6 +42,23 @@ func InsertReview(title string, url string, users string) {
 	review.Users = users
 
 	err := review.InsertG(boil.Infer())
+	if err != nil {
+		panic(err)
+	}
+}
+
+func UpdateReview(ID uint, title string, url string, users string) {
+	review, err := models.Reviews(qm.Where("id = ?", ID)).OneG()
+	if err != nil && err != sql.ErrNoRows {
+		log.Fatal(err)
+	}
+
+	review.URL = url
+	review.IsDone = false
+	review.Title = title
+	review.Users = users
+
+	err = review.UpdateG(boil.Infer())
 	if err != nil {
 		panic(err)
 	}
