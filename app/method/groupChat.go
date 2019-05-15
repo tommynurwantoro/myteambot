@@ -10,20 +10,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-// GroupCommands List all commands
-var GroupCommands = []Command{
-	{"start", "Tentang bot ini"},
-	{"help", "Nampilin semua perintah yang ada"},
-	{"halo", "Cuma buat nyapa aja"},
-	{"retro", "Masuk ke sesi retrospective"},
-	{"result_retro", "{dd-mm-yyyy} Dapetin hasil retrospective, jangan lupa kasih tanggalnya ya"},
-	{"titip_review", "{title#url#telegram-users} Titip review PR"},
-	{"antrian_review", "Nampilin semua antrian PR yang belum direview"},
-	{"sudah_direview", "{urutan} Ngubah antrian review untuk yang sudah direview"},
-	{"sudah_direview_semua", "{urutan} Ngubah antrian review untuk yang sudah direview untuk semua user"},
-	{"tambah_user_review", "{urutan#users} Nambahin user ke antrian review"},
-}
-
 // GroupChat _
 func GroupChat(update tgbotapi.Update) string {
 	if !mysql.IsUserEligible(update.Message.From.UserName) {
@@ -46,28 +32,9 @@ func GroupChat(update tgbotapi.Update) string {
 	}
 
 	if groupState == utility.RedisState["init"] {
-		args := update.Message.CommandArguments()
 		switch update.Message.Command() {
-		case GroupCommands[0].Name: //start
-			return text.Start()
-		case GroupCommands[1].Name: //help
-			return text.Help(GenerateAllCommands(GroupCommands))
-		case GroupCommands[2].Name: //halo
-			return text.Halo(update.Message.From.UserName)
-		case GroupCommands[3].Name: //retro
+		case AllCommands[3].Name: //retro
 			return "Kalau mau retro DM aku aja ya, biar gak diliat yang lain. 😄"
-		case GroupCommands[4].Name: //result_retro
-			return ResultRetro(args)
-		case GroupCommands[5].Name: //titip_review
-			return AddReview(args)
-		case GroupCommands[6].Name: //antrian_review
-			return GetReviewQueue()
-		case GroupCommands[7].Name: //sudah_direview
-			return UpdateDoneReview(args, update.Message.From.UserName, false)
-		case GroupCommands[8].Name: //sudah_direview_semua
-			return UpdateDoneReview(args, update.Message.From.UserName, true)
-		case GroupCommands[9].Name: //tambah_user_review
-			return AddUserReview(args)
 		default:
 			return text.InvalidCommand()
 		}

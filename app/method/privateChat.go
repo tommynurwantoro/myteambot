@@ -11,20 +11,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-// PrivateCommands List all private commands
-var PrivateCommands = []Command{
-	{"start", "Tentang bot ini"},
-	{"help", "Nampilin semua perintah yang ada"},
-	{"halo", "Cuma buat nyapa aja"},
-	{"retro", "Masuk ke sesi retrospective"},
-	{"result_retro", "{dd-mm-yyyy} Dapetin hasil retrospective, jangan lupa kasih tanggalnya ya"},
-	{"titip_review", "{title#url#telegram-users} Titip review PR"},
-	{"antrian_review", "Nampilin semua antrian PR yang belum direview"},
-	{"sudah_direview", "{urutan} Ngubah antrian review untuk yang sudah direview"},
-	{"sudah_direview_semua", "{urutan} Ngubah antrian review untuk yang sudah direview untuk semua user"},
-	{"tambah_user_review", "{urutan#users} Nambahin user ke antrian review"},
-}
-
 // PrivateChat _
 func PrivateChat(update tgbotapi.Update) string {
 	if !mysql.IsUserEligible(update.Message.From.UserName) {
@@ -49,26 +35,8 @@ func PrivateChat(update tgbotapi.Update) string {
 
 	if userState == utility.RedisState["init"] {
 		switch update.Message.Command() {
-		case PrivateCommands[0].Name: //start
-			return text.Start()
-		case PrivateCommands[1].Name: //help
-			return text.Help(GenerateAllCommands(PrivateCommands))
-		case PrivateCommands[2].Name: //halo
-			return text.Halo(update.Message.From.UserName)
-		case PrivateCommands[3].Name: //retro
+		case AllCommands[3].Name: //retro
 			return StartRetro(update, userSessionKey)
-		case PrivateCommands[4].Name: //result_retro
-			return ResultRetro(args)
-		case PrivateCommands[5].Name: //titip_review
-			return AddReview(args)
-		case PrivateCommands[6].Name: //antrian_review
-			return GetReviewQueue()
-		case PrivateCommands[7].Name: //sudah_direview
-			return UpdateDoneReview(args, update.Message.From.UserName, false)
-		case PrivateCommands[8].Name: //sudah_direview_semua
-			return UpdateDoneReview(args, update.Message.From.UserName, true)
-		case PrivateCommands[9].Name: //tambah_user_review
-			return AddUserReview(args)
 		case "add_user":
 			return AddUser(update, args)
 		default:

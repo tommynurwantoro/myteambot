@@ -28,11 +28,15 @@ func main() {
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 			log.Printf("%+v", update.Message.Chat)
 
-			if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
-				log.Printf("Group chat")
-				msg.Text = method.GroupChat(update)
-			} else {
-				msg.Text = method.PrivateChat(update)
+			msg.Text = method.AllChat(update)
+
+			if msg.Text == "" {
+				if update.Message.Chat.IsGroup() || update.Message.Chat.IsSuperGroup() {
+					log.Printf("Group chat")
+					msg.Text = method.GroupChat(update)
+				} else {
+					msg.Text = method.PrivateChat(update)
+				}
 			}
 
 			msg.ParseMode = "HTML"
