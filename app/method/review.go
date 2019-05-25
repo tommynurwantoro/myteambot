@@ -11,13 +11,24 @@ import (
 
 // GetReviewQueue _
 func GetReviewQueue() string {
-	reviews := mysql.GetAllNeedReviews()
+	reviews := mysql.GetAllNeedReview()
 
 	if len(reviews) == 0 {
 		return "Gak ada antrian review nih 👍🏻"
 	}
 
-	return fmt.Sprintf("Ini antrian review tim kamu:\n%s", GenerateAllNeedReviews(reviews))
+	return fmt.Sprintf("Ini antrian review tim kamu:\n%s", GenerateHTMLReview(reviews))
+}
+
+// GetQAQueue _
+func GetQAQueue() string {
+	reviews := mysql.GetAllNeedQA()
+
+	if len(reviews) == 0 {
+		return "Gak ada antrian QA nih 👍🏻"
+	}
+
+	return fmt.Sprintf("Ini antrian QA tim kamu:\n%s", GenerateHTMLReview(reviews))
 }
 
 // AddReview _
@@ -53,7 +64,7 @@ func UpdateDoneReview(args string, username string, force bool) string {
 			continue
 		}
 
-		if mysql.UpdateToDone(sequence-updated, fmt.Sprintf("@%s", username), force) {
+		if mysql.UpdateToDoneReview(sequence-updated, fmt.Sprintf("@%s", username), force) {
 			updated++
 			success = true
 		}
@@ -61,6 +72,35 @@ func UpdateDoneReview(args string, username string, force bool) string {
 
 	if success {
 		return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetReviewQueue())
+	}
+
+	return text.InvalidSequece()
+}
+
+// UpdateDoneQA _
+func UpdateDoneQA(args string) string {
+	if args == "" {
+		return text.InvalidParameter()
+	}
+
+	sequences := strings.Split(args, " ")
+	success := false
+	updated := 0
+
+	for _, seq := range sequences {
+		sequence, err := strconv.Atoi(seq)
+		if err != nil {
+			continue
+		}
+
+		if mysql.UpdateToDoneQA(sequence - updated) {
+			updated++
+			success = true
+		}
+	}
+
+	if success {
+		return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetQAQueue())
 	}
 
 	return text.InvalidSequece()
@@ -79,7 +119,7 @@ func AddUserReview(args string) string {
 		return text.InvalidParameter()
 	}
 
-	reviews := mysql.GetAllNeedReviews()
+	reviews := mysql.GetAllNeedReview()
 
 	for i, review := range reviews {
 		if i+1 == sequence {

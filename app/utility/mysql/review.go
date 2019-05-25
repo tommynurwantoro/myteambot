@@ -12,9 +12,9 @@ import (
 	"github.com/bot/myteambot/app/models"
 )
 
-// GetAllNeedReviews _
-func GetAllNeedReviews() []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_done = ?", false), qm.OrderBy("created_at")).AllG()
+// GetAllNeedReview _
+func GetAllNeedReview() []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_done = ? AND users != ''", false), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,8 +22,18 @@ func GetAllNeedReviews() []*models.Review {
 	return reviews
 }
 
-// GetAllReviewed _
-func GetAllReviewed() []*models.Review {
+// GetAllNeedQA _
+func GetAllNeedQA() []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_done = ? AND users = ''", false), qm.OrderBy("created_at")).AllG()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return reviews
+}
+
+// GetAllDone _
+func GetAllDone() []*models.Review {
 	reviews, err := models.Reviews(qm.Where("is_done = ?", true), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
@@ -64,9 +74,9 @@ func UpdateReview(ID uint, title string, url string, users string) {
 	}
 }
 
-// UpdateToDone _
-func UpdateToDone(sequence int, user string, force bool) bool {
-	reviews := GetAllNeedReviews()
+// UpdateToDoneReview _
+func UpdateToDoneReview(sequence int, user string, force bool) bool {
+	reviews := GetAllNeedReview()
 
 	for i, review := range reviews {
 		if i == sequence-1 {
@@ -76,9 +86,24 @@ func UpdateToDone(sequence int, user string, force bool) bool {
 				review.Users = removeAvailableUsers(review.Users, user)
 			}
 
-			if review.Users == "" {
-				review.IsDone = true
+			err := review.UpdateG(boil.Infer())
+			if err != nil {
+				panic(err)
 			}
+
+			return true
+		}
+	}
+
+	return false
+}
+
+func UpdateToDoneQA(sequence int) bool {
+	reviews := GetAllNeedQA()
+
+	for i, review := range reviews {
+		if i == sequence-1 {
+			review.IsDone = true
 
 			err := review.UpdateG(boil.Infer())
 			if err != nil {
