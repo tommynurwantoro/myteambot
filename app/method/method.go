@@ -30,41 +30,44 @@ func Init() {
 }
 
 func Start(m *tb.Message) {
-	app.Bot.Send(m.Sender, text.Start())
+	app.Bot.Send(m.Chat, text.Start())
 }
 
 func Help(m *tb.Message) {
-	app.Bot.Send(m.Sender, text.Help(GenerateAllCommands(GetCommand().All())))
+	app.Bot.Send(m.Chat, text.Help(GenerateAllCommands(GetCommand().All())))
 }
 
 func Halo(m *tb.Message) {
-	app.Bot.Send(m.Sender, text.Halo(m.Sender.Username))
+	app.Bot.Send(m.Chat, text.Halo(m.Sender.Username))
 }
 
 func Retro(m *tb.Message) {
+	if !m.Private() {
+		app.Bot.Send(m.Chat, text.CheckPrivateMessage())
+	}
 	app.Bot.Send(m.Sender, text.StartRetro())
 }
 
 func ResultRetro(m *tb.Message) {
-	app.Bot.Send(m.Sender, GetResultRetro(m.Payload))
+	app.Bot.Send(m.Chat, GetResultRetro(m.Payload))
 }
 
 func TitipReview(m *tb.Message) {
-	app.Bot.Send(m.Sender, AddReview(m.Payload))
+	app.Bot.Send(m.Chat, AddReview(m.Payload))
 }
 
 func AntrianReview(m *tb.Message) {
-	app.Bot.Send(m.Sender, GetReviewQueue(), tb.ModeHTML)
+	app.Bot.Send(m.Chat, GetReviewQueue(), tb.ModeHTML)
 }
 
 func SudahDireview(m *tb.Message) {
-	app.Bot.Send(m.Sender, UpdateDoneReview(m.Payload, m.Sender.Username, false), tb.ModeHTML)
+	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, false), tb.ModeHTML)
 }
 
 func SudahDireviewSemua(m *tb.Message) {
-	app.Bot.Send(m.Sender, UpdateDoneReview(m.Payload, m.Sender.Username, true), tb.ModeHTML)
+	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, true), tb.ModeHTML)
 }
 
 func TambahUserReview(m *tb.Message) {
-	app.Bot.Send(m.Sender, AddUserReview(m.Payload))
+	app.Bot.Send(m.Chat, AddUserReview(m.Payload))
 }
