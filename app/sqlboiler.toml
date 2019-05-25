@@ -1,5 +1,5 @@
 [mysql]
-  dbname  = "act_bl_bot"
+  dbname  = "my_team_bot"
   host    = "localhost"
   port    = 3306
   user    = "root"

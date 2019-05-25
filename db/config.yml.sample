@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  database: act_bl_bot
+  database: my_team_bot
   port:     3306
   username: root
   password: root

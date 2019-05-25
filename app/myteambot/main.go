@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/bot/act-bl-bot/app"
-	"github.com/bot/act-bl-bot/app/method"
+	"github.com/bot/myteambot/app"
+	"github.com/bot/myteambot/app/method"
 )
 
 func main() {

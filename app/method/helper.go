@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/bot/act-bl-bot/app/models"
+	"github.com/bot/myteambot/app/models"
 )
 
 // GetUsernames _

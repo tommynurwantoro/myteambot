@@ -1,6 +1,6 @@
-# Act BL Bot
+# My Team Bot
 
-Telegram bot for some activities in ACT (my team)
+Telegram bot for some activities in my team
 
 ## Owner
 
@@ -38,13 +38,13 @@ Telegram bot for some activities in ACT (my team)
   If you don't have directory `src`, `github.com`, or `bot` in your GOPATH, please make them.
 
   ```sh
-  git clone git@github.com:tommynurwantoro/act-bl-bot.git
+  git clone git@github.com:tommynurwantoro/myteambot.git
   ```
 
-- Go to act_bl_bot directory, then sync the vendor file
+- Go to my_team_bot directory, then sync the vendor file
 
   ```sh
-  cd $GOPATH/src/github.com/bot/act-bl-bot
+  cd $GOPATH/src/github.com/bot/myteambot
   make dep
   ```
 

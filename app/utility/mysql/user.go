@@ -5,7 +5,7 @@ import (
 
 	"github.com/volatiletech/sqlboiler/boil"
 
-	"github.com/bot/act-bl-bot/app/models"
+	"github.com/bot/myteambot/app/models"
 	"github.com/volatiletech/sqlboiler/queries/qm"
 )
 

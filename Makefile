@@ -5,15 +5,15 @@ pretty:
 	gofmt -s -w .
 
 build: pretty dep
-	go build -o actblbot app/act-bl-bot/main.go
+	go build -o tbot app/myteambot/main.go
 
 run: build
-	./actblbot
+	./tbot
 
 deploy:
-	sudo cp actblbot.service /lib/systemd/system/actblbot.service
+	sudo cp tbot.service /lib/systemd/system/tbot.service
 
 # Only for development
 dev:
-	go build -o actblbot app/act-bl-bot/main.go
-	./actblbot
+	go build -o tbot app/myteambot/main.go
+	./tbot

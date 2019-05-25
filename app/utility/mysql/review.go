@@ -9,7 +9,7 @@ import (
 
 	"github.com/volatiletech/sqlboiler/queries/qm"
 
-	"github.com/bot/act-bl-bot/app/models"
+	"github.com/bot/myteambot/app/models"
 )
 
 // GetAllNeedReviews _

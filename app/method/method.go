@@ -1,8 +1,8 @@
 package method
 
 import (
-	"github.com/bot/act-bl-bot/app"
-	"github.com/bot/act-bl-bot/app/text"
+	"github.com/bot/myteambot/app"
+	"github.com/bot/myteambot/app/text"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
