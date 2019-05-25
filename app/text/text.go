@@ -103,3 +103,8 @@ func SuccessUpdateData() string {
 func InvalidSequece() string {
 	return "Gak bisa, gak ada di list"
 }
+
+// CheckPrivateMessage _
+func CheckPrivateMessage() string {
+	return "Cek DM kamu yaa"
+}
