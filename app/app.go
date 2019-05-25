@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/volatiletech/sqlboiler/boil"
@@ -16,15 +17,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/joho/godotenv"
+
+	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 // Redis _
 var Redis *redis.Client
 
 // Bot _
-var Bot *tgbotapi.BotAPI
+var Bot *tb.Bot
 
 var once sync.Once
 
@@ -63,15 +65,16 @@ func resolveMysql() {
 	boil.SetDB(mysqlClient)
 }
 
-func resolveBot() *tgbotapi.BotAPI {
-	bot, err := tgbotapi.NewBotAPI(os.Getenv("TOKEN"))
+func resolveBot() *tb.Bot {
+	bot, err := tb.NewBot(tb.Settings{
+		Token:  os.Getenv("TOKEN"),
+		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
+	})
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 
-	bot.Debug = false
-
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+	log.Printf("Authorized on account %s", bot.Me.Username)
 
 	return bot
 }

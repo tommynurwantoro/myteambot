@@ -2,15 +2,7 @@
 
 
 [[projects]]
-  digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
-  name = "github.com/fsnotify/fsnotify"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
-  version = "v1.4.7"
-
-[[projects]]
-  digest = "1:ad53d1f710522a38d1f0e5e0a55a194b1c6b2cd8e84313568e43523271f0cf62"
+  digest = "1:c950e574951c7199fb3d990d0e7a61996f40f8e646ba7cf8a557878d4c737f53"
   name = "github.com/go-redis/redis"
   packages = [
     ".",
@@ -22,8 +14,8 @@
     "internal/util",
   ]
   pruneopts = "UT"
-  revision = "22be8a3eaf992c828cecb69dc07348313bf08d2e"
-  version = "v6.15.1"
+  revision = "75795aa4236dc7341eefac3bbe945e68c99ef9df"
+  version = "v6.15.3"
 
 [[projects]]
   digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
@@ -34,39 +26,12 @@
   version = "v1.4.1"
 
 [[projects]]
-  digest = "1:51712f342cdefcad2c867f399a3ce8223675221d4386c81cfcccd8f0656e722e"
-  name = "github.com/go-telegram-bot-api/telegram-bot-api"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "9860bdfd3a171ceafb6e1eafa163482a6ef92643"
-  version = "v4.6.4"
-
-[[projects]]
   digest = "1:bed9d72d596f94e65fff37f4d6c01398074a6bb1c3f3ceff963516bd01db6ff5"
   name = "github.com/gofrs/uuid"
   packages = ["."]
   pruneopts = "UT"
   revision = "6b08a5c5172ba18946672b49749cde22873dd7c2"
   version = "v3.2.0"
-
-[[projects]]
-  digest = "1:c0d19ab64b32ce9fe5cf4ddceba78d5bc9807f0016db6b1183599da3dcc24d10"
-  name = "github.com/hashicorp/hcl"
-  packages = [
-    ".",
-    "hcl/ast",
-    "hcl/parser",
-    "hcl/printer",
-    "hcl/scanner",
-    "hcl/strconv",
-    "hcl/token",
-    "json/parser",
-    "json/scanner",
-    "json/token",
-  ]
-  pruneopts = "UT"
-  revision = "8cb6e5b959231cc1119e43259c4a608f9c51a241"
-  version = "v1.0.0"
 
 [[projects]]
   digest = "1:ecd9aa82687cf31d1585d4ac61d0ba180e42e8a6182b85bd785fcca8dfeefc1b"
@@ -77,47 +42,16 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:c4eaf5c51409d14be6b1010ac6ee6c0f54df8254e508fd3490700a22c7eadc16"
-  name = "github.com/kat-co/vala"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "bfe9b50e828ad56312e486cbf4165ff1ac3a9bae"
-  version = "v1"
-
-[[projects]]
-  digest = "1:8ef506fc2bb9ced9b151dafa592d4046063d744c646c1bbe801982ce87e4bc24"
+  digest = "1:bdd53b87de8185da386bae179c84d4848854c6870bacacf6a154fe63e2e750f7"
   name = "github.com/lib/pq"
   packages = [
     ".",
     "oid",
+    "scram",
   ]
   pruneopts = "UT"
-  revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
-  version = "v1.0.0"
-
-[[projects]]
-  digest = "1:c568d7727aa262c32bdf8a3f7db83614f7af0ed661474b24588de635c20024c7"
-  name = "github.com/magiconair/properties"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "c2353362d570a7bfa228149c62842019201cfb71"
-  version = "v1.8.0"
-
-[[projects]]
-  digest = "1:53bc4cd4914cd7cd52139990d5170d6dc99067ae31c56530621b18b35fc30318"
-  name = "github.com/mitchellh/mapstructure"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
-  version = "v1.1.2"
-
-[[projects]]
-  digest = "1:95741de3af260a92cc5c7f3f3061e85273f5a81b5db20d4bd68da74bd521675e"
-  name = "github.com/pelletier/go-toml"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "c01d1270ff3e442a8a57cddc1c92dc1138598194"
-  version = "v1.2.0"
+  revision = "bc6a3c0594130b1e34005880bc600b6d3f49fa7f"
+  version = "v1.1.1"
 
 [[projects]]
   digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
@@ -128,55 +62,12 @@
   version = "v0.8.1"
 
 [[projects]]
-  digest = "1:3e39bafd6c2f4bf3c76c3bfd16a2e09e016510ad5db90dc02b88e2f565d6d595"
-  name = "github.com/spf13/afero"
-  packages = [
-    ".",
-    "mem",
-  ]
-  pruneopts = "UT"
-  revision = "f4711e4db9e9a1d3887343acb72b2bbfc2f686f5"
-  version = "v1.2.1"
-
-[[projects]]
   digest = "1:08d65904057412fc0270fc4812a1c90c594186819243160dc779a402d4b6d0bc"
   name = "github.com/spf13/cast"
   packages = ["."]
   pruneopts = "UT"
   revision = "8c9545af88b134710ab1cd196795e7f2388358d7"
   version = "v1.3.0"
-
-[[projects]]
-  digest = "1:68ea4e23713989dc20b1bded5d9da2c5f9be14ff9885beef481848edd18c26cb"
-  name = "github.com/spf13/jwalterweatherman"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "4a4406e478ca629068e7768fc33f3f044173c0a6"
-  version = "v1.0.0"
-
-[[projects]]
-  digest = "1:c1b1102241e7f645bc8e0c22ae352e8f0dc6484b6cb4d132fa9f24174e0119e2"
-  name = "github.com/spf13/pflag"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
-  version = "v1.0.3"
-
-[[projects]]
-  digest = "1:de37e343c64582d7026bf8ab6ac5b22a72eac54f3a57020db31524affed9f423"
-  name = "github.com/spf13/viper"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "6d33b5a963d922d182c91e8a1c88d81fd150cfd4"
-  version = "v1.3.1"
-
-[[projects]]
-  digest = "1:420817f94b6c172dabb8a054d0b2d257d7437a87c7c8c7ee432bc008a577fc46"
-  name = "github.com/technoweenie/multipartstreamer"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "a90a01d73ae432e2611d178c18367fbaa13e0154"
-  version = "v1.0.1"
 
 [[projects]]
   branch = "master"
@@ -198,12 +89,11 @@
   version = "v8.0.0"
 
 [[projects]]
-  digest = "1:107b7bf949c73ec42dfb3811f0cf40d5d6d700d7950dc21bea79f86d1ffd0056"
+  digest = "1:c044a9af034e05796d826c8432283f8a02a7278b2ea80b9f320c2664355c7af5"
   name = "github.com/volatiletech/sqlboiler"
   packages = [
     "boil",
     "drivers",
-    "drivers/sqlboiler-mysql/driver",
     "importers",
     "queries",
     "queries/qm",
@@ -212,47 +102,24 @@
     "strmangle",
   ]
   pruneopts = "UT"
-  revision = "df8550538fefdf62f2520e74dbfad73f1bcb84a2"
-  version = "v3.2.0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:d0e9a312c4610a508569ab25e54d34600b1a96d19b1866ece104ffdf1c1b9d2c"
-  name = "golang.org/x/sys"
-  packages = ["unix"]
-  pruneopts = "UT"
-  revision = "cd391775e71e684db52b63df9affd58269495083"
-
-[[projects]]
-  digest = "1:8029e9743749d4be5bc9f7d42ea1659471767860f0cdc34d37c3111bd308a295"
-  name = "golang.org/x/text"
-  packages = [
-    "internal/gen",
-    "internal/triegen",
-    "internal/ucd",
-    "transform",
-    "unicode/cldr",
-    "unicode/norm",
-  ]
-  pruneopts = "UT"
-  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
-  version = "v0.3.0"
+  revision = "2942e962f90c880033128ab75f1b7e27badc3346"
+  version = "v3.3.0"
 
 [[projects]]
   digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
   name = "google.golang.org/appengine"
   packages = ["cloudsql"]
   pruneopts = "UT"
-  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
-  version = "v1.4.0"
+  revision = "4c25cacc810c02874000e4f7071286a8e96b2515"
+  version = "v1.6.0"
 
 [[projects]]
-  digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
-  name = "gopkg.in/yaml.v2"
+  branch = "v2"
+  digest = "1:e9ffc5283e40419d0d038e1637fb877443677efd58fbf1642c66b028fd0cb2de"
+  name = "gopkg.in/tucnak/telebot.v2"
   packages = ["."]
   pruneopts = "UT"
-  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
-  version = "v2.2.2"
+  revision = "8c1c512262f2f97b1212eb1751efb498d2038a0c"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -260,21 +127,17 @@
   input-imports = [
     "github.com/go-redis/redis",
     "github.com/go-sql-driver/mysql",
-    "github.com/go-telegram-bot-api/telegram-bot-api",
     "github.com/joho/godotenv",
-    "github.com/kat-co/vala",
     "github.com/lib/pq",
     "github.com/pkg/errors",
-    "github.com/spf13/viper",
     "github.com/volatiletech/null",
     "github.com/volatiletech/sqlboiler/boil",
     "github.com/volatiletech/sqlboiler/drivers",
-    "github.com/volatiletech/sqlboiler/drivers/sqlboiler-mysql/driver",
     "github.com/volatiletech/sqlboiler/queries",
     "github.com/volatiletech/sqlboiler/queries/qm",
     "github.com/volatiletech/sqlboiler/queries/qmhelper",
-    "github.com/volatiletech/sqlboiler/randomize",
     "github.com/volatiletech/sqlboiler/strmangle",
+    "gopkg.in/tucnak/telebot.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

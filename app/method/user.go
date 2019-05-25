@@ -3,16 +3,15 @@ package method
 import (
 	"github.com/bot/act-bl-bot/app/text"
 	"github.com/bot/act-bl-bot/app/utility/mysql"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 // AddUser _
-func AddUser(update tgbotapi.Update, args string) string {
+func AddUser(username string, args string) string {
 	if args == "" {
 		return text.InvalidParameter()
 	}
 
-	if !mysql.IsAdmin(update.Message.From.UserName) {
+	if !mysql.IsAdmin(username) {
 		return "Kamu gak boleh pakai perintah ini, ngomong dulu ke @tommynurwantoro ya"
 	}
 

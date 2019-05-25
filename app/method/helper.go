@@ -9,12 +9,6 @@ import (
 	"github.com/bot/act-bl-bot/app/models"
 )
 
-// Command _
-type Command struct {
-	Name        string
-	Description string
-}
-
 // GetUsernames _
 func GetUsernames(usernames string) []string {
 	arr := strings.Split(usernames, " ")
@@ -48,7 +42,7 @@ func GenerateAllCommands(commands []Command) string {
 	var buffer bytes.Buffer
 
 	for _, command := range commands {
-		buffer.WriteString(fmt.Sprintf("/%s %s\n", command.Name, command.Description))
+		buffer.WriteString(fmt.Sprintf("%s %s\n", command.Name, command.Description))
 	}
 
 	return buffer.String()

@@ -38,14 +38,12 @@ func InvalidDate() string {
 
 // StartRetro _
 func StartRetro() string {
-	return "Kamu memasuki sesi retrospective nih.\n" +
-		"Silakan gunakan perintah di bawah ini yaa:\n" +
+	return "Untuk sesi retrospective, silakan gunakan perintah di bawah ini yaa:\n" +
 		"/glad pesan kamu\n" +
 		"/sad pesan kamu\n" +
 		"/mad pesan kamu\n\n" +
 		"Tenang aja hasilnya anonymous kok.\n" +
-		"Untuk mendapatkan hasilnya, kamu bisa gunakan perintah /result_retro dd-mm-yyyy\n" +
-		"Untuk menghentikan sesi retro ini, kamu bisa gunakan perintah /end_retro\n"
+		"Untuk mendapatkan hasilnya, kamu bisa gunakan perintah /result_retro dd-mm-yyyy\n"
 }
 
 // SuccessInsertMessage _
@@ -53,19 +51,14 @@ func SuccessInsertMessage() string {
 	return "Pesan kamu udah aku catat ke database yaa.\nKalau mau aku catatin pesan lain juga boleh pake perintah yang sama kayak sebelumnya."
 }
 
+// RestrictGroupRetro _
+func RestrictGroupRetro() string {
+	return "Kalau mau gunakan perintah ini DM aku aja ya, biar gak diliat yang lain. 😄"
+}
+
 // InvalidRetroMessage _
 func InvalidRetroMessage() string {
 	return "Pesannya belum ada tuh. Coba lagi ya.."
-}
-
-// PleaseEndRetro _
-func PleaseEndRetro() string {
-	return "Selesaikan sesi retronya dulu ya dengan perintah /end_retro"
-}
-
-// EndRetro _
-func EndRetro() string {
-	return "Terimakasih, sesi retronya udah berakhir."
 }
 
 // GenerateRetroResult _
