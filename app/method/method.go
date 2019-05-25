@@ -27,6 +27,8 @@ func Init() {
 	app.Bot.Handle(c.SudahDireview().Name, SudahDireview)
 	app.Bot.Handle(c.SudahDireviewSemua().Name, SudahDireviewSemua)
 	app.Bot.Handle(c.TambahUserReview().Name, TambahUserReview)
+	app.Bot.Handle(c.AntrianQA().Name, AntrianQA)
+	app.Bot.Handle(c.SudahDites().Name, SudahDites)
 }
 
 func Start(m *tb.Message) {
@@ -70,4 +72,12 @@ func SudahDireviewSemua(m *tb.Message) {
 
 func TambahUserReview(m *tb.Message) {
 	app.Bot.Send(m.Chat, AddUserReview(m.Payload))
+}
+
+func AntrianQA(m *tb.Message) {
+	app.Bot.Send(m.Chat, GetQAQueue(), tb.ModeHTML)
+}
+
+func SudahDites(m *tb.Message) {
+	app.Bot.Send(m.Chat, UpdateDoneQA(m.Payload))
 }
