@@ -17,6 +17,9 @@ func (c *Command) All() []Command {
 		c.Help(),
 		c.Halo(),
 		c.Retro(),
+		c.Glad(),
+		c.Sad(),
+		c.Sad(),
 		c.ResultRetro(),
 		c.TitipReview(),
 		c.AntrianReview(),
@@ -43,15 +46,15 @@ func (c *Command) Retro() Command {
 }
 
 func (c *Command) Glad() Command {
-	return Command{"/glad", "Glad retro"}
+	return Command{"/glad", "Pesan glad untuk retro"}
 }
 
 func (c *Command) Sad() Command {
-	return Command{"/sad", "Sad retro"}
+	return Command{"/sad", "Pesan sad untuk retro"}
 }
 
 func (c *Command) Mad() Command {
-	return Command{"/mad", "Mad retro"}
+	return Command{"/mad", "Pesan mad untuk retro"}
 }
 
 func (c *Command) ResultRetro() Command {
