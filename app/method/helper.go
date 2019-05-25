@@ -22,8 +22,8 @@ func GetUsernames(usernames string) []string {
 	return newArr
 }
 
-// GenerateAllNeedReviews _
-func GenerateAllNeedReviews(reviews []*models.Review) string {
+// GenerateHTMLReview _
+func GenerateHTMLReview(reviews []*models.Review) string {
 	var buffer bytes.Buffer
 
 	for i, review := range reviews {
