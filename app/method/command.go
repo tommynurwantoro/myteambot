@@ -26,6 +26,8 @@ func (c *Command) All() []Command {
 		c.SudahDireview(),
 		c.SudahDireviewSemua(),
 		c.TambahUserReview(),
+		c.AntrianQA(),
+		c.SudahDites(),
 	}
 }
 
@@ -79,4 +81,12 @@ func (c *Command) SudahDireviewSemua() Command {
 
 func (c *Command) TambahUserReview() Command {
 	return Command{"/tambah_user_review", "{urutan#telegram-users} Nambahin user ke antrian review"}
+}
+
+func (c *Command) AntrianQA() Command {
+	return Command{"/antrian_qa", "Nampilin semua antrian PR yang belum dites"}
+}
+
+func (c *Command) SudahDites() Command {
+	return Command{"/sudah_dites", "{urutan} Ngubah antrian QA untuk yang sudah dites"}
 }
