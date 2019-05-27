@@ -122,3 +122,11 @@ func CommandGroupOnly() string {
 func GroupNotFound() string {
 	return fmt.Sprintf("Group gak ketemu, pakai perintah /init_group dulu")
 }
+
+func GreetingFromBot() string {
+	return "Halo semua, mohon bantuannya..."
+}
+
+func GreetingNewJoinedUser(username string) string {
+	return fmt.Sprintf("Welcome %s!!! GLHF 😁", username)
+}
