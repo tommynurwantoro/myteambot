@@ -33,6 +33,8 @@ func (c *Command) All() []Command {
 		c.Start(),
 		c.Help(),
 		c.Halo(),
+		c.InitGroup(),
+		c.AddUser(),
 		c.Retro(),
 		c.Glad(),
 		c.Sad(),
