@@ -31,6 +31,8 @@ func Init() {
 	app.Bot.Handle(c.SudahDites().Name, SudahDites)
 	app.Bot.Handle(c.InitGroup().Name, InitGroup)
 	app.Bot.Handle(c.AddUser().Name, AddEligibleUser)
+	app.Bot.Handle(tb.OnAddedToGroup, GreetingFromBot)
+	app.Bot.Handle(tb.OnUserJoined, GreetNewJoinedUser)
 }
 
 func Start(m *tb.Message) {
@@ -98,4 +100,12 @@ func AddEligibleUser(m *tb.Message) {
 	} else {
 		app.Bot.Send(m.Chat, AddUser(m.Sender.Username, m.Payload, int(m.Chat.ID)))
 	}
+}
+
+func GreetingFromBot(m *tb.Message) {
+	app.Bot.Send(m.Chat, text.GreetingFromBot())
+}
+
+func GreetNewJoinedUser(m *tb.Message) {
+	app.Bot.Send(m.Chat, text.GreetingNewJoinedUser(m.UserJoined.Username))
 }
