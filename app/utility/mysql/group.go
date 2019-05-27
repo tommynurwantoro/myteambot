@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"database/sql"
-	"log"
 
 	"github.com/volatiletech/sqlboiler/boil"
 
@@ -10,7 +9,7 @@ import (
 	"github.com/volatiletech/sqlboiler/queries/qm"
 )
 
-func InsertGroup(chatID int, name string) {
+func InsertGroup(chatID int64, name string) {
 	var group models.Group
 
 	group.ChatID = chatID
@@ -28,7 +27,7 @@ func FindGroup(ID uint) *models.Group {
 	return group
 }
 
-func FindGroupByChatID(chatID int) *models.Group {
+func FindGroupByChatID(chatID int64) *models.Group {
 	group, err := models.Groups(qm.Where("chat_id = ?", chatID)).OneG()
 	if err != nil && err != sql.ErrNoRows {
 		panic(err)
@@ -45,9 +44,8 @@ func UpdateGroup(ID uint, name string) {
 	group.UpdateG(boil.Infer())
 }
 
-func UpsertGroup(chatID int, name string) {
+func UpsertGroup(chatID int64, name string) {
 	group := FindGroupByChatID(chatID)
-	log.Printf("%v", group)
 	if group == nil {
 		InsertGroup(chatID, name)
 	} else {

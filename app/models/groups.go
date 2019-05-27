@@ -23,7 +23,7 @@ import (
 // Group is an object representing the database table.
 type Group struct {
 	ID     uint   `boil:"id" json:"id" toml:"id" yaml:"id"`
-	ChatID int    `boil:"chat_id" json:"chat_id" toml:"chat_id" yaml:"chat_id"`
+	ChatID int64  `boil:"chat_id" json:"chat_id" toml:"chat_id" yaml:"chat_id"`
 	Name   string `boil:"name" json:"name" toml:"name" yaml:"name"`
 
 	R *groupR `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -51,22 +51,22 @@ func (w whereHelperuint) LTE(x uint) qm.QueryMod { return qmhelper.Where(w.field
 func (w whereHelperuint) GT(x uint) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
 func (w whereHelperuint) GTE(x uint) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
 
-type whereHelperint struct{ field string }
+type whereHelperint64 struct{ field string }
 
-func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
+func (w whereHelperint64) EQ(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
+func (w whereHelperint64) NEQ(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
+func (w whereHelperint64) LT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
+func (w whereHelperint64) LTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
+func (w whereHelperint64) GT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
+func (w whereHelperint64) GTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
 
 var GroupWhere = struct {
 	ID     whereHelperuint
-	ChatID whereHelperint
+	ChatID whereHelperint64
 	Name   whereHelperstring
 }{
 	ID:     whereHelperuint{field: `id`},
-	ChatID: whereHelperint{field: `chat_id`},
+	ChatID: whereHelperint64{field: `chat_id`},
 	Name:   whereHelperstring{field: `name`},
 }
 

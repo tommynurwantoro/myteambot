@@ -6,7 +6,7 @@ import (
 )
 
 // AddUser _
-func AddUser(username, args string, chatID int) string {
+func AddUser(username, args string, chatID int64) string {
 	if args == "" {
 		return text.InvalidParameter()
 	}

@@ -6,7 +6,7 @@ import (
 )
 
 // AddGroup _
-func AddGroup(chatID int, name string) string {
+func AddGroup(chatID int64, name string) string {
 	mysql.UpsertGroup(chatID, name)
 
 	return text.SuccessInitGroup(name)

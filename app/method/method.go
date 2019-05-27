@@ -1,6 +1,8 @@
 package method
 
 import (
+	"log"
+
 	"github.com/bot/myteambot/app"
 	"github.com/bot/myteambot/app/text"
 	tb "gopkg.in/tucnak/telebot.v2"
@@ -90,7 +92,8 @@ func InitGroup(m *tb.Message) {
 	if m.Private() {
 		app.Bot.Send(m.Chat, text.CommandGroupOnly())
 	} else {
-		app.Bot.Send(m.Chat, AddGroup(int(m.Chat.ID), m.Chat.Title))
+		log.Println(m.Chat.ID)
+		app.Bot.Send(m.Chat, AddGroup(m.Chat.ID, m.Chat.Title))
 	}
 }
 
@@ -98,7 +101,7 @@ func AddEligibleUser(m *tb.Message) {
 	if m.Private() {
 		app.Bot.Send(m.Chat, text.CommandGroupOnly())
 	} else {
-		app.Bot.Send(m.Chat, AddUser(m.Sender.Username, m.Payload, int(m.Chat.ID)))
+		app.Bot.Send(m.Chat, AddUser(m.Sender.Username, m.Payload, m.Chat.ID))
 	}
 }
 
