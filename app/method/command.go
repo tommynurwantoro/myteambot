@@ -38,7 +38,7 @@ func (c *Command) All() []Command {
 		c.Retro(),
 		c.Glad(),
 		c.Sad(),
-		c.Sad(),
+		c.Mad(),
 		c.ResultRetro(),
 		c.TitipReview(),
 		c.AntrianReview(),
