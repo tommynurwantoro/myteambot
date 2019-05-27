@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/volatiletech/sqlboiler/boil"
 
@@ -46,6 +47,7 @@ func UpdateGroup(ID uint, name string) {
 
 func UpsertGroup(chatID int, name string) {
 	group := FindGroupByChatID(chatID)
+	log.Printf("%v", group)
 	if group == nil {
 		InsertGroup(chatID, name)
 	} else {
