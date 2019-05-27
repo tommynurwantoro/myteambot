@@ -5,12 +5,14 @@ package models
 
 var TableNames = struct {
 	ArInternalMetadata string
+	Groups             string
 	Retros             string
 	Reviews            string
 	SchemaMigrations   string
 	Users              string
 }{
 	ArInternalMetadata: "ar_internal_metadata",
+	Groups:             "groups",
 	Retros:             "retros",
 	Reviews:            "reviews",
 	SchemaMigrations:   "schema_migrations",

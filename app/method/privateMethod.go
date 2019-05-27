@@ -3,7 +3,6 @@ package method
 import (
 	"github.com/bot/myteambot/app"
 	"github.com/bot/myteambot/app/text"
-	"github.com/bot/myteambot/app/utility/mysql"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -15,10 +14,6 @@ func NewPrivateMethod() *PrivateMethod {
 	return &PrivateMethod{
 		Bot: app.Bot,
 	}
-}
-
-func (p *PrivateMethod) AddUser(m *tb.Message) {
-	p.Response(m, "add_user")
 }
 
 func (p *PrivateMethod) Glad(m *tb.Message) {
@@ -35,13 +30,8 @@ func (p *PrivateMethod) Mad(m *tb.Message) {
 
 // Response _
 func (p *PrivateMethod) Response(m *tb.Message, command string) {
-	if !mysql.IsUserEligible(m.Sender.Username) {
-		app.Bot.Send(m.Sender, text.UserNotEligible())
-		return
-	}
-
 	if !m.Private() {
-		app.Bot.Send(m.Sender, text.RestrictGroupRetro())
+		app.Bot.Send(m.Chat, text.RestrictGroupRetro())
 		return
 	}
 
@@ -49,8 +39,6 @@ func (p *PrivateMethod) Response(m *tb.Message, command string) {
 	c := GetCommand()
 
 	switch command {
-	case "add_user":
-		app.Bot.Send(m.Sender, AddUser(m.Sender.Username, args))
 	case c.Glad().Name:
 		app.Bot.Send(m.Sender, InsertRetroMessage(m.Sender.Username, "glad", args))
 	case c.Sad().Name:

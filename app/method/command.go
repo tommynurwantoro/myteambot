@@ -1,5 +1,22 @@
 package method
 
+/**
+start - Tentang bot ini
+help - Nampilin semua perintah yang ada
+halo - Cuma buat nyapa aja
+init_group - Initialize group ke dalam bot
+add_user - Menambah user agar dapat menggunakan bot
+retro - Bantuan untuk perintah retrospective
+result_retro - {dd-mm-yyyy} Dapetin hasil retrospective, jangan lupa kasih tanggalnya ya
+titip_review - {title#url#telegram-users} Titip review PR
+antrian_review - Nampilin semua antrian PR yang belum direview
+sudah_direview - {urutan} Ngubah antrian review untuk yang sudah direview
+sudah_direview_semua - {urutan} Ngubah antrian review untuk yang sudah direview untuk semua user
+tambah_user_review - {urutan#telegram-users} Nambahin user ke antrian review
+antrian_qa - Nampilin semua antrian PR yang belum dites
+sudah_dites - {urutan} Ngubah antrian QA untuk yang sudah dites
+**/
+
 // Command _
 type Command struct {
 	Name        string
@@ -89,4 +106,12 @@ func (c *Command) AntrianQA() Command {
 
 func (c *Command) SudahDites() Command {
 	return Command{"/sudah_dites", "{urutan} Ngubah antrian QA untuk yang sudah dites"}
+}
+
+func (c *Command) InitGroup() Command {
+	return Command{"/init_group", "Initialize group ke dalam bot"}
+}
+
+func (c *Command) AddUser() Command {
+	return Command{"/add_user", "Menambah user agar dapat menggunakan bot"}
 }

@@ -25,6 +25,7 @@ type User struct {
 	ID       uint   `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Username string `boil:"username" json:"username" toml:"username" yaml:"username"`
 	IsAdmin  bool   `boil:"is_admin" json:"is_admin" toml:"is_admin" yaml:"is_admin"`
+	GroupID  int    `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
 
 	R *userR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L userL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -34,10 +35,12 @@ var UserColumns = struct {
 	ID       string
 	Username string
 	IsAdmin  string
+	GroupID  string
 }{
 	ID:       "id",
 	Username: "username",
 	IsAdmin:  "is_admin",
+	GroupID:  "group_id",
 }
 
 // Generated where
@@ -46,10 +49,12 @@ var UserWhere = struct {
 	ID       whereHelperuint
 	Username whereHelperstring
 	IsAdmin  whereHelperbool
+	GroupID  whereHelperint
 }{
 	ID:       whereHelperuint{field: `id`},
 	Username: whereHelperstring{field: `username`},
 	IsAdmin:  whereHelperbool{field: `is_admin`},
+	GroupID:  whereHelperint{field: `group_id`},
 }
 
 // UserRels is where relationship names are stored.
@@ -69,8 +74,8 @@ func (*userR) NewStruct() *userR {
 type userL struct{}
 
 var (
-	userColumns               = []string{"id", "username", "is_admin"}
-	userColumnsWithoutDefault = []string{"username", "is_admin"}
+	userColumns               = []string{"id", "username", "is_admin", "group_id"}
+	userColumnsWithoutDefault = []string{"username", "is_admin", "group_id"}
 	userColumnsWithDefault    = []string{"id"}
 	userPrimaryKeyColumns     = []string{"id"}
 )

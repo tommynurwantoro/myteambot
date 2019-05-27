@@ -13,8 +13,8 @@ import (
 )
 
 // GetAllNeedReview _
-func GetAllNeedReview() []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_done = ? AND users != ''", false), qm.OrderBy("created_at")).AllG()
+func GetAllNeedReview(groupID int) []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_done = ? AND users != '' AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,8 +23,8 @@ func GetAllNeedReview() []*models.Review {
 }
 
 // GetAllNeedQA _
-func GetAllNeedQA() []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_done = ? AND users = ''", false), qm.OrderBy("created_at")).AllG()
+func GetAllNeedQA(groupID int) []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_done = ? AND users = '' AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,8 +33,8 @@ func GetAllNeedQA() []*models.Review {
 }
 
 // GetAllDone _
-func GetAllDone() []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_done = ?", true), qm.OrderBy("created_at")).AllG()
+func GetAllDone(groupID int) []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_done = ? AND group_id = ?", true, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,13 +43,14 @@ func GetAllDone() []*models.Review {
 }
 
 // InsertReview _
-func InsertReview(title string, url string, users string) {
+func InsertReview(title, url, users string, groupID int) {
 	var review models.Review
 
 	review.URL = url
 	review.IsDone = false
 	review.Title = title
 	review.Users = users
+	review.GroupID = groupID
 
 	err := review.InsertG(boil.Infer())
 	if err != nil {
@@ -57,7 +58,7 @@ func InsertReview(title string, url string, users string) {
 	}
 }
 
-func UpdateReview(ID uint, title string, url string, users string) {
+func UpdateReview(ID uint, title, url, users string) {
 	review, err := models.Reviews(qm.Where("id = ?", ID)).OneG()
 	if err != nil && err != sql.ErrNoRows {
 		log.Fatal(err)
@@ -75,8 +76,8 @@ func UpdateReview(ID uint, title string, url string, users string) {
 }
 
 // UpdateToDoneReview _
-func UpdateToDoneReview(sequence int, user string, force bool) bool {
-	reviews := GetAllNeedReview()
+func UpdateToDoneReview(sequence, groupID int, user string, force bool) bool {
+	reviews := GetAllNeedReview(groupID)
 
 	for i, review := range reviews {
 		if i == sequence-1 {
@@ -98,8 +99,8 @@ func UpdateToDoneReview(sequence int, user string, force bool) bool {
 	return false
 }
 
-func UpdateToDoneQA(sequence int) bool {
-	reviews := GetAllNeedQA()
+func UpdateToDoneQA(sequence, groupID int) bool {
+	reviews := GetAllNeedQA(groupID)
 
 	for i, review := range reviews {
 		if i == sequence-1 {
@@ -117,7 +118,7 @@ func UpdateToDoneQA(sequence int) bool {
 	return false
 }
 
-func removeAvailableUsers(users string, deleteUser string) string {
+func removeAvailableUsers(users, deleteUser string) string {
 	splitUsers := strings.Split(users, " ")
 	var newUsers []string
 

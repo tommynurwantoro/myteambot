@@ -4,6 +4,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.primary_key :id, :unsigned_integer, auto_increment: true
       t.string :username, null: false
       t.boolean :is_admin, null: false
+      t.integer :group_id, null: false
     end
   end
 end

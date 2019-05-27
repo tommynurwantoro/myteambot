@@ -10,20 +10,33 @@ import (
 
 // InsertRetroMessage _
 func InsertRetroMessage(username string, _type string, args string) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
 	if args == "" {
 		return text.InvalidRetroMessage()
 	}
-	mysql.InsertMessageRetro(username, _type, args)
+
+	user := mysql.FindUserByUsername(username)
+
+	mysql.InsertMessageRetro(username, _type, args, user.GroupID)
 	return text.SuccessInsertMessage()
 }
 
 // GetResultRetro _
-func GetResultRetro(args string) string {
+func GetResultRetro(username, args string) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
 	if args == "" {
 		year, month, day := time.Now().Date()
 		args = fmt.Sprintf("%d-%02d-%d", day, int(month), year)
 	}
 
-	results := mysql.GetResultRetro(args)
+	user := mysql.FindUserByUsername(username)
+
+	results := mysql.GetResultRetro(args, user.GroupID)
 	return "Ini hasil retro untuk tanggal " + args + "\n\n" + text.GenerateRetroResult(results)
 }

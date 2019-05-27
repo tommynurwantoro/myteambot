@@ -10,8 +10,14 @@ import (
 )
 
 // GetReviewQueue _
-func GetReviewQueue() string {
-	reviews := mysql.GetAllNeedReview()
+func GetReviewQueue(username string) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
+	user := mysql.FindUserByUsername(username)
+
+	reviews := mysql.GetAllNeedReview(user.GroupID)
 
 	if len(reviews) == 0 {
 		return "Gak ada antrian review nih 👍🏻"
@@ -21,8 +27,14 @@ func GetReviewQueue() string {
 }
 
 // GetQAQueue _
-func GetQAQueue() string {
-	reviews := mysql.GetAllNeedQA()
+func GetQAQueue(username string) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
+	user := mysql.FindUserByUsername(username)
+
+	reviews := mysql.GetAllNeedQA(user.GroupID)
 
 	if len(reviews) == 0 {
 		return "Gak ada antrian QA nih 👍🏻"
@@ -32,10 +44,16 @@ func GetQAQueue() string {
 }
 
 // AddReview _
-func AddReview(args string) string {
+func AddReview(username, args string) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
 	if args == "" {
 		return text.InvalidParameter()
 	}
+
+	user := mysql.FindUserByUsername(username)
 
 	split := strings.Split(args, "#")
 
@@ -43,13 +61,19 @@ func AddReview(args string) string {
 		return text.InvalidParameter()
 	}
 
-	mysql.InsertReview(split[0], split[1], split[2])
+	mysql.InsertReview(split[0], split[1], split[2], user.GroupID)
 
 	return text.SuccessInsertData()
 }
 
 // UpdateDoneReview _
-func UpdateDoneReview(args string, username string, force bool) string {
+func UpdateDoneReview(args, username string, force bool) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
+	user := mysql.FindUserByUsername(username)
+
 	if args == "" {
 		return text.InvalidParameter()
 	}
@@ -64,21 +88,27 @@ func UpdateDoneReview(args string, username string, force bool) string {
 			continue
 		}
 
-		if mysql.UpdateToDoneReview(sequence-updated, fmt.Sprintf("@%s", username), force) {
+		if mysql.UpdateToDoneReview(sequence-updated, user.GroupID, fmt.Sprintf("@%s", username), force) {
 			updated++
 			success = true
 		}
 	}
 
 	if success {
-		return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetReviewQueue())
+		return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetReviewQueue(username))
 	}
 
 	return text.InvalidSequece()
 }
 
 // UpdateDoneQA _
-func UpdateDoneQA(args string) string {
+func UpdateDoneQA(args, username string) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
+	user := mysql.FindUserByUsername(username)
+
 	if args == "" {
 		return text.InvalidParameter()
 	}
@@ -93,20 +123,26 @@ func UpdateDoneQA(args string) string {
 			continue
 		}
 
-		if mysql.UpdateToDoneQA(sequence - updated) {
+		if mysql.UpdateToDoneQA(sequence-updated, user.GroupID) {
 			updated++
 			success = true
 		}
 	}
 
 	if success {
-		return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetQAQueue())
+		return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetQAQueue(username))
 	}
 
 	return text.InvalidSequece()
 }
 
-func AddUserReview(args string) string {
+func AddUserReview(args, username string) string {
+	if !mysql.IsUserEligible(username) {
+		return text.UserNotEligible()
+	}
+
+	user := mysql.FindUserByUsername(username)
+
 	if args == "" {
 		return text.InvalidParameter()
 	}
@@ -119,12 +155,12 @@ func AddUserReview(args string) string {
 		return text.InvalidParameter()
 	}
 
-	reviews := mysql.GetAllNeedReview()
+	reviews := mysql.GetAllNeedReview(user.GroupID)
 
 	for i, review := range reviews {
 		if i+1 == sequence {
 			mysql.UpdateReview(review.ID, review.Title, review.URL, fmt.Sprintf("%s %s", review.Users, split[1]))
-			return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetReviewQueue())
+			return fmt.Sprintf("%s\n%s", text.SuccessUpdateData(), GetReviewQueue(username))
 		}
 	}
 

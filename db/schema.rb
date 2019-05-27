@@ -10,12 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_13_071009) do
+ActiveRecord::Schema.define(version: 2019_05_27_021028) do
+
+  create_table "groups", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "chat_id", null: false
+    t.string "name", null: false
+  end
 
   create_table "retros", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "type", null: false
     t.string "message", limit: 191
+    t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -23,15 +29,17 @@ ActiveRecord::Schema.define(version: 2019_05_13_071009) do
   create_table "reviews", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "url", null: false
     t.boolean "is_done", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "title", null: false
     t.string "users", null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "username", null: false
     t.boolean "is_admin", null: false
+    t.integer "group_id", null: false
   end
 
 end

@@ -6,7 +6,7 @@ import (
 )
 
 // AddUser _
-func AddUser(username string, args string) string {
+func AddUser(username, args string, chatID int) string {
 	if args == "" {
 		return text.InvalidParameter()
 	}
@@ -15,9 +15,14 @@ func AddUser(username string, args string) string {
 		return "Kamu gak boleh pakai perintah ini, ngomong dulu ke @tommynurwantoro ya"
 	}
 
+	group := mysql.FindGroupByChatID(chatID)
+	if group == nil {
+		return text.GroupNotFound()
+	}
+
 	usernames := GetUsernames(args)
 	for _, username := range usernames {
-		mysql.FirstOrCreateUser(username)
+		mysql.UpsertUser(username, int(group.ID))
 	}
 
 	return text.SuccessAddMember(usernames)

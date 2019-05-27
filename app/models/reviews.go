@@ -25,10 +25,11 @@ type Review struct {
 	ID        uint      `boil:"id" json:"id" toml:"id" yaml:"id"`
 	URL       string    `boil:"url" json:"url" toml:"url" yaml:"url"`
 	IsDone    bool      `boil:"is_done" json:"is_done" toml:"is_done" yaml:"is_done"`
-	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 	Title     string    `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Users     string    `boil:"users" json:"users" toml:"users" yaml:"users"`
+	GroupID   int       `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
+	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
 	R *reviewR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L reviewL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -38,18 +39,20 @@ var ReviewColumns = struct {
 	ID        string
 	URL       string
 	IsDone    string
-	CreatedAt string
-	UpdatedAt string
 	Title     string
 	Users     string
+	GroupID   string
+	CreatedAt string
+	UpdatedAt string
 }{
 	ID:        "id",
 	URL:       "url",
 	IsDone:    "is_done",
-	CreatedAt: "created_at",
-	UpdatedAt: "updated_at",
 	Title:     "title",
 	Users:     "users",
+	GroupID:   "group_id",
+	CreatedAt: "created_at",
+	UpdatedAt: "updated_at",
 }
 
 // Generated where
@@ -67,18 +70,20 @@ var ReviewWhere = struct {
 	ID        whereHelperuint
 	URL       whereHelperstring
 	IsDone    whereHelperbool
-	CreatedAt whereHelpertime_Time
-	UpdatedAt whereHelpertime_Time
 	Title     whereHelperstring
 	Users     whereHelperstring
+	GroupID   whereHelperint
+	CreatedAt whereHelpertime_Time
+	UpdatedAt whereHelpertime_Time
 }{
 	ID:        whereHelperuint{field: `id`},
 	URL:       whereHelperstring{field: `url`},
 	IsDone:    whereHelperbool{field: `is_done`},
-	CreatedAt: whereHelpertime_Time{field: `created_at`},
-	UpdatedAt: whereHelpertime_Time{field: `updated_at`},
 	Title:     whereHelperstring{field: `title`},
 	Users:     whereHelperstring{field: `users`},
+	GroupID:   whereHelperint{field: `group_id`},
+	CreatedAt: whereHelpertime_Time{field: `created_at`},
+	UpdatedAt: whereHelpertime_Time{field: `updated_at`},
 }
 
 // ReviewRels is where relationship names are stored.
@@ -98,8 +103,8 @@ func (*reviewR) NewStruct() *reviewR {
 type reviewL struct{}
 
 var (
-	reviewColumns               = []string{"id", "url", "is_done", "created_at", "updated_at", "title", "users"}
-	reviewColumnsWithoutDefault = []string{"url", "is_done", "created_at", "updated_at", "title", "users"}
+	reviewColumns               = []string{"id", "url", "is_done", "title", "users", "group_id", "created_at", "updated_at"}
+	reviewColumnsWithoutDefault = []string{"url", "is_done", "title", "users", "group_id", "created_at", "updated_at"}
 	reviewColumnsWithDefault    = []string{"id"}
 	reviewPrimaryKeyColumns     = []string{"id"}
 )

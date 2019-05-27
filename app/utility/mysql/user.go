@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"database/sql"
 	"log"
 
 	"github.com/volatiletech/sqlboiler/boil"
@@ -12,7 +13,7 @@ import (
 // FindUserByUsername _
 func FindUserByUsername(username string) *models.User {
 	user, err := models.Users(qm.Where("username = ?", username)).OneG()
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		log.Println(err)
 	}
 
@@ -39,11 +40,12 @@ func IsAdmin(username string) bool {
 	return user.IsAdmin
 }
 
-// InsertOneUser _
-func InsertOneUser(username string) {
+// InsertUser _
+func InsertUser(username string, groupID int) {
 	var user models.User
 
 	user.Username = username
+	user.GroupID = groupID
 
 	err := user.InsertG(boil.Infer())
 	if err != nil {
@@ -51,10 +53,25 @@ func InsertOneUser(username string) {
 	}
 }
 
-// FirstOrCreateUser _
-func FirstOrCreateUser(username string) {
+// UpdateUser _
+func UpdateUser(username string, groupID int) {
+	user := FindUserByUsername(username)
+
+	user.Username = username
+	user.GroupID = groupID
+
+	err := user.UpdateG(boil.Infer())
+	if err != nil {
+		panic(err)
+	}
+}
+
+// UpsertUser _
+func UpsertUser(username string, groupID int) {
 	user := FindUserByUsername(username)
 	if user == nil {
-		InsertOneUser(username)
+		InsertUser(username, groupID)
+	} else {
+		UpdateUser(username, groupID)
 	}
 }

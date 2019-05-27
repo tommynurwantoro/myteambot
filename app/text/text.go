@@ -1,6 +1,7 @@
 package text
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bot/myteambot/app/models"
@@ -8,12 +9,12 @@ import (
 
 // UserNotEligible _
 func UserNotEligible() string {
-	return "Kamu belum bisa ikutan retro, coba hubungin @tommynurwantoro"
+	return "Kamu belum ada akses bot, coba hubungin @tommynurwantoro"
 }
 
 // Start _
 func Start() string {
-	return "Halo!!\nIni botnya tim ACT.\nCoba gunakan /help untuk melihat perintah-perintah yang tersedia ya.\nKalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
+	return "Halo!!\nCoba gunakan /help untuk melihat perintah-perintah yang tersedia ya.\nKalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
 }
 
 // Help _
@@ -107,4 +108,17 @@ func InvalidSequece() string {
 // CheckPrivateMessage _
 func CheckPrivateMessage() string {
 	return "Cek DM kamu yaa"
+}
+
+// SuccessInitGroup _
+func SuccessInitGroup(groupName string) string {
+	return fmt.Sprintf("Berhasil menambahkan group %s", groupName)
+}
+
+func CommandGroupOnly() string {
+	return "Perintah ini cuma bisa di group ya"
+}
+
+func GroupNotFound() string {
+	return fmt.Sprintf("Group gak ketemu, pakai perintah /init_group dulu")
 }

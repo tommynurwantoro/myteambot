@@ -5,6 +5,7 @@ class CreateRetros < ActiveRecord::Migration[5.2]
       t.string :username, null: false
       t.string :type, null: false #glad,sad,mad
       t.string :message, null: false
+      t.integer :group_id, null: false
       
       t.timestamps null: false
     end
