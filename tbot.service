@@ -9,8 +9,8 @@ User=root
 Restart=on-failure
 RestartSec=10
 
-WorkingDirectory=/home/tommy/go/src/github.com/bot/myteambot
-ExecStart=/home/tommy/go/src/github.com/bot/myteambot/tbot
+WorkingDirectory=/root/go/src/github.com/bot/myteambot
+ExecStart=/root/go/src/github.com/bot/myteambot/tbot
 
 [Install]
 WantedBy=multi-user.target
