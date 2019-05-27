@@ -7,10 +7,7 @@ import (
 
 // AddGroup _
 func AddGroup(chatID int, name string) string {
-	group := mysql.FindGroupByChatID(chatID)
-	if group == nil {
-		mysql.UpsertGroup(chatID, name)
-	}
+	mysql.UpsertGroup(chatID, name)
 
 	return text.SuccessInitGroup(name)
 }
