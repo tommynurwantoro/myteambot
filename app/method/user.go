@@ -11,9 +11,9 @@ func AddUser(username, args string, chatID int64) string {
 		return text.InvalidParameter()
 	}
 
-	if !mysql.IsAdmin(username) {
-		return "Kamu gak boleh pakai perintah ini, ngomong dulu ke @tommynurwantoro ya"
-	}
+	// if !mysql.IsAdmin(username) {
+	// 	return "Kamu gak boleh pakai perintah ini, ngomong dulu ke @tommynurwantoro ya"
+	// }
 
 	group := mysql.FindGroupByChatID(chatID)
 	if group == nil {
