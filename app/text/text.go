@@ -14,7 +14,12 @@ func UserNotEligible() string {
 
 // Start _
 func Start() string {
-	return "Halo!!\nCoba gunakan /help untuk melihat perintah-perintah yang tersedia ya.\nKalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
+	return "Halo!!\n" +
+		"Pertama-tama undang aku ke group kamu, terus gunakan perintah /init_group\n" +
+		"Nah, terus gunakan perintah /add_user {user telegram teman-teman di group kamu}\n" +
+		"Udah deh kalian bisa pakai perintah-perintah yang lain.\n" +
+		"Coba gunakan /help untuk melihat perintah-perintah yang tersedia ya.\n" +
+		"Kalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
 }
 
 // Help _
