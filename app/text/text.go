@@ -17,7 +17,7 @@ func Start() string {
 	return "Halo!!\n" +
 		"Pertama-tama undang aku ke group kamu, terus gunakan perintah /init_group\n" +
 		"Nah, terus gunakan perintah /add_user {user telegram teman-teman di group kamu}\n" +
-		"Contoh: /add_user @user1 @user2 @user3\n" +
+		"Contoh: /add_user @haha @hehe @hihi\n" +
 		"Udah deh kalian bisa pakai perintah-perintah yang lain.\n" +
 		"Coba gunakan /help untuk melihat perintah-perintah yang tersedia ya.\n" +
 		"Kalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
