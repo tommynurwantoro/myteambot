@@ -65,27 +65,27 @@ func TitipReview(m *tb.Message) {
 }
 
 func AntrianReview(m *tb.Message) {
-	app.Bot.Send(m.Chat, GetReviewQueue(m.Sender.Username), tb.ModeHTML)
+	app.Bot.Send(m.Chat, GetReviewQueue(m.Sender.Username), tb.ModeHTML, tb.NoPreview)
 }
 
 func SudahDireview(m *tb.Message) {
-	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, false), tb.ModeHTML)
+	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, false), tb.ModeHTML, tb.NoPreview)
 }
 
 func SudahDireviewSemua(m *tb.Message) {
-	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, true), tb.ModeHTML)
+	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, true), tb.ModeHTML, tb.NoPreview)
 }
 
 func TambahUserReview(m *tb.Message) {
-	app.Bot.Send(m.Chat, AddUserReview(m.Payload, m.Sender.Username))
+	app.Bot.Send(m.Chat, AddUserReview(m.Payload, m.Sender.Username), tb.ModeHTML, tb.NoPreview)
 }
 
 func AntrianQA(m *tb.Message) {
-	app.Bot.Send(m.Chat, GetQAQueue(m.Sender.Username), tb.ModeHTML)
+	app.Bot.Send(m.Chat, GetQAQueue(m.Sender.Username), tb.ModeHTML, tb.NoPreview)
 }
 
 func SudahDites(m *tb.Message) {
-	app.Bot.Send(m.Chat, UpdateDoneQA(m.Payload, m.Sender.Username))
+	app.Bot.Send(m.Chat, UpdateDoneQA(m.Payload, m.Sender.Username), tb.ModeHTML, tb.NoPreview)
 }
 
 func InitGroup(m *tb.Message) {
