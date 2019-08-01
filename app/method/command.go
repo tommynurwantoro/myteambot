@@ -47,6 +47,7 @@ func (c *Command) All() []Command {
 		c.TambahUserReview(),
 		c.AntrianQA(),
 		c.SudahDites(),
+		c.SendChat(),
 	}
 }
 
@@ -116,4 +117,8 @@ func (c *Command) InitGroup() Command {
 
 func (c *Command) AddUser() Command {
 	return Command{"/add_user", "Menambah user agar dapat menggunakan bot"}
+}
+
+func (c *Command) SendChat() Command {
+	return Command{"/kirim_pesan", "{chatID#Messages} Kirim pesan ke chat yang dipilih"}
 }

@@ -2,6 +2,7 @@ package method
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/bot/myteambot/app"
 	"github.com/bot/myteambot/app/text"
@@ -35,6 +36,7 @@ func Init() {
 	app.Bot.Handle(c.AddUser().Name, AddEligibleUser)
 	app.Bot.Handle(tb.OnAddedToGroup, GreetingFromBot)
 	app.Bot.Handle(tb.OnUserJoined, GreetNewJoinedUser)
+	app.Bot.Handle(c.SendChat().Name, SendCustomChat)
 }
 
 func Start(m *tb.Message) {
@@ -111,4 +113,17 @@ func GreetingFromBot(m *tb.Message) {
 
 func GreetNewJoinedUser(m *tb.Message) {
 	app.Bot.Send(m.Chat, text.GreetingNewJoinedUser(m.UserJoined.Username))
+}
+
+func SendCustomChat(m *tb.Message) {
+	chatID, response := SendChatToSpecificGroup(m.Sender.Username, m.Payload)
+	if chatID != "" {
+		intChatID, err := strconv.ParseInt(chatID, 10, 64)
+		if err != nil {
+			app.Bot.Send(m.Chat, text.InvalidParameter())
+			return
+		}
+		m.Chat.ID = intChatID
+	}
+	app.Bot.Send(m.Chat, response)
 }
