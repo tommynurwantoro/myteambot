@@ -20,7 +20,8 @@ func Start() string {
 		"Contoh: /add_user @haha @hehe @hihi\n" +
 		"Udah deh kalian bisa pakai perintah-perintah yang lain.\n" +
 		"Coba gunakan /help untuk melihat perintah-perintah yang tersedia ya.\n" +
-		"Kalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
+		"Note : kamu cuma bisa pakai fitur di satu group ya, kalau udah punya group sebelumnya sama aku, ulangi perintah /add_user dengan parameter user kamu lagi.\n" +
+		"\nKalau ada yang bingung atau butuh akses coba hubungi @tommynurwantoro aja"
 }
 
 // Help _
