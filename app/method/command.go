@@ -48,6 +48,10 @@ func (c *Command) All() []Command {
 		c.AntrianQA(),
 		c.SudahDites(),
 		c.SendChat(),
+		c.SimpanCommand(),
+		c.ListCommand(),
+		c.UbahCommand(),
+		c.HapusCommand(),
 	}
 }
 
@@ -121,4 +125,20 @@ func (c *Command) AddUser() Command {
 
 func (c *Command) SendChat() Command {
 	return Command{"/kirim_pesan", "{chatID#Messages} Kirim pesan ke chat yang dipilih"}
+}
+
+func (c *Command) SimpanCommand() Command {
+	return Command{"/simpan_command", "{kata#pesan} Kalau ada pengingat dengan perintah tertentu bisa pakai command ini loh"}
+}
+
+func (c *Command) ListCommand() Command {
+	return Command{"/list_command", "List custom command yang ada di group kamu"}
+}
+
+func (c *Command) UbahCommand() Command {
+	return Command{"/ubah_command", "{urutan#pesan} Ubah isi pengingat yang ada di list command"}
+}
+
+func (c *Command) HapusCommand() Command {
+	return Command{"/hapus_command", "{urutan} Hapus isi pengingat yang ada di list command"}
 }

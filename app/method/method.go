@@ -1,6 +1,7 @@
 package method
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -37,6 +38,11 @@ func Init() {
 	app.Bot.Handle(tb.OnAddedToGroup, GreetingFromBot)
 	app.Bot.Handle(tb.OnUserJoined, GreetNewJoinedUser)
 	app.Bot.Handle(c.SendChat().Name, SendCustomChat)
+	app.Bot.Handle(c.SimpanCommand().Name, SaveCommand)
+	app.Bot.Handle(c.ListCommand().Name, ListCommand)
+	app.Bot.Handle(c.UbahCommand().Name, UpdateCommand)
+	app.Bot.Handle(c.HapusCommand().Name, DeleteCommand)
+	app.Bot.Handle(tb.OnText, RespondAllText)
 }
 
 func Start(m *tb.Message) {
@@ -126,4 +132,28 @@ func SendCustomChat(m *tb.Message) {
 		m.Chat.ID = intChatID
 	}
 	app.Bot.Send(m.Chat, response)
+}
+
+func SaveCommand(m *tb.Message) {
+	app.Bot.Send(m.Chat, SaveCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+}
+
+func ListCommand(m *tb.Message) {
+	app.Bot.Send(m.Chat, ListCustomCommandGroup(m.Chat.ID, m.Sender.Username))
+}
+
+func UpdateCommand(m *tb.Message) {
+	app.Bot.Send(m.Chat, UpdateCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+}
+
+func DeleteCommand(m *tb.Message) {
+	app.Bot.Send(m.Chat, DeleteCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+}
+
+func RespondAllText(m *tb.Message) {
+	fmt.Println(m.Text)
+	respond := RespondCustomCommandGroup(m.Chat.ID, m.Text)
+	if respond != "" {
+		app.Bot.Send(m.Chat, respond)
+	}
 }
