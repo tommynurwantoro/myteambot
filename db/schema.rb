@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_27_021028) do
+ActiveRecord::Schema.define(version: 2019_09_23_085657) do
+
+  create_table "custom_commands", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.string "command", null: false
+    t.string "message", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "groups", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "chat_id", null: false
@@ -21,7 +29,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_021028) do
     t.string "username", null: false
     t.string "type", null: false
     t.string "message", limit: 191
-    t.integer "group_id", null: false
+    t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -31,7 +39,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_021028) do
     t.boolean "is_done", null: false
     t.string "title", null: false
     t.string "users", null: false
-    t.integer "group_id", null: false
+    t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -39,7 +47,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_021028) do
   create_table "users", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "username", null: false
     t.boolean "is_admin", null: false
-    t.integer "group_id", null: false
+    t.bigint "group_id", null: false
   end
 
 end
