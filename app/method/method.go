@@ -1,7 +1,6 @@
 package method
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 
@@ -151,7 +150,6 @@ func DeleteCommand(m *tb.Message) {
 }
 
 func RespondAllText(m *tb.Message) {
-	fmt.Println(m.Text)
 	respond := RespondCustomCommandGroup(m.Chat.ID, m.Text)
 	if respond != "" {
 		app.Bot.Send(m.Chat, respond)
