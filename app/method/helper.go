@@ -47,3 +47,13 @@ func GenerateAllCommands(commands []Command) string {
 
 	return buffer.String()
 }
+
+func GenerateCustomCommands(commands []*models.CustomCommand) string {
+	var buffer bytes.Buffer
+
+	for i, command := range commands {
+		buffer.WriteString(fmt.Sprintf("%d. %s\n", i+1, command.Command))
+	}
+
+	return buffer.String()
+}
