@@ -7,13 +7,9 @@ import (
 
 // AddUser _
 func AddUser(username, args string, chatID int64) string {
-	if args == "" {
-		return text.InvalidParameter()
+	if validation := IsValidRequest(username, args); validation != "" {
+		return validation
 	}
-
-	// if !mysql.IsAdmin(username) {
-	// 	return "Kamu gak boleh pakai perintah ini, ngomong dulu ke @tommynurwantoro ya"
-	// }
 
 	group := mysql.FindGroupByChatID(chatID)
 	if group == nil {
@@ -22,7 +18,7 @@ func AddUser(username, args string, chatID int64) string {
 
 	usernames := GetUsernames(args)
 	for _, username := range usernames {
-		mysql.UpsertUser(username, int(group.ID))
+		mysql.UpsertUser(username, int64(group.ID))
 	}
 
 	return text.SuccessAddMember(usernames)
