@@ -27,7 +27,7 @@ type Retro struct {
 	Username  string      `boil:"username" json:"username" toml:"username" yaml:"username"`
 	Type      string      `boil:"type" json:"type" toml:"type" yaml:"type"`
 	Message   null.String `boil:"message" json:"message,omitempty" toml:"message" yaml:"message,omitempty"`
-	GroupID   int         `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
+	GroupID   int64       `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
 	CreatedAt time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
@@ -55,21 +55,12 @@ var RetroColumns = struct {
 
 // Generated where
 
-type whereHelperint struct{ field string }
-
-func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-
 var RetroWhere = struct {
 	ID        whereHelperuint
 	Username  whereHelperstring
 	Type      whereHelperstring
 	Message   whereHelpernull_String
-	GroupID   whereHelperint
+	GroupID   whereHelperint64
 	CreatedAt whereHelpertime_Time
 	UpdatedAt whereHelpertime_Time
 }{
@@ -77,7 +68,7 @@ var RetroWhere = struct {
 	Username:  whereHelperstring{field: `username`},
 	Type:      whereHelperstring{field: `type`},
 	Message:   whereHelpernull_String{field: `message`},
-	GroupID:   whereHelperint{field: `group_id`},
+	GroupID:   whereHelperint64{field: `group_id`},
 	CreatedAt: whereHelpertime_Time{field: `created_at`},
 	UpdatedAt: whereHelpertime_Time{field: `updated_at`},
 }
