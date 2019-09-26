@@ -47,12 +47,10 @@ func (c *Command) All() []Command {
 		c.TambahUserReview(),
 		c.AntrianQA(),
 		c.SudahDites(),
-		c.SendChat(),
 		c.SimpanCommand(),
 		c.ListCommand(),
 		c.UbahCommand(),
 		c.HapusCommand(),
-		c.BlastMessage(),
 	}
 }
 
