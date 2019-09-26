@@ -137,3 +137,7 @@ func GreetingFromBot() string {
 func GreetingNewJoinedUser(username string) string {
 	return fmt.Sprintf("Welcome %s!!! GLHF 😁", username)
 }
+
+func CustomCommandNotFound() string {
+	return "Belum ada custom command nih, pakai command /simpan_command dulu aja"
+}
