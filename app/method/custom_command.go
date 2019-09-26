@@ -9,7 +9,7 @@ import (
 	"github.com/bot/myteambot/app/utility/mysql"
 )
 
-func SaveCustomCommandGroup(groupID int64, username, args string) string {
+func SaveCustomCommandGroup(chatID int64, username, args string) string {
 	if validation := IsValidRequest(username, args); validation != "" {
 		return validation
 	}
@@ -20,17 +20,20 @@ func SaveCustomCommandGroup(groupID int64, username, args string) string {
 		return text.InvalidParameter()
 	}
 
-	mysql.InsertCustomCommand(groupID, split[0], split[1])
+	group := mysql.FindGroupByChatID(chatID)
+
+	mysql.InsertCustomCommand(int(group.ID), split[0], split[1])
 
 	return text.SuccessInsertData()
 }
 
-func ListCustomCommandGroup(groupID int64, username string) string {
+func ListCustomCommandGroup(chatID int64, username string) string {
 	if validation := IsValidRequest(username, "OK"); validation != "" {
 		return validation
 	}
 
-	customCommands := mysql.GetAllCustomCommandsByGroupID(groupID)
+	group := mysql.FindGroupByChatID(chatID)
+	customCommands := mysql.GetAllCustomCommandsByGroupID(int(group.ID))
 
 	if len(customCommands) == 0 {
 		return "Belum ada custom command nih, pakai command /simpan_command aja"
@@ -39,7 +42,7 @@ func ListCustomCommandGroup(groupID int64, username string) string {
 	return fmt.Sprintf("Ini list command tim kamu:\n%s", GenerateCustomCommands(customCommands))
 }
 
-func UpdateCustomCommandGroup(groupID int64, username, args string) string {
+func UpdateCustomCommandGroup(chatID int64, username, args string) string {
 	if validation := IsValidRequest(username, args); validation != "" {
 		return validation
 	}
@@ -55,12 +58,14 @@ func UpdateCustomCommandGroup(groupID int64, username, args string) string {
 		return text.InvalidParameter()
 	}
 
-	mysql.UpdateCustomCommand(groupID, sequence, split[1])
+	group := mysql.FindGroupByChatID(chatID)
+
+	mysql.UpdateCustomCommand(int(group.ID), sequence, split[1])
 
 	return text.SuccessUpdateData()
 }
 
-func DeleteCustomCommandGroup(groupID int64, username, args string) string {
+func DeleteCustomCommandGroup(chatID int64, username, args string) string {
 	if validation := IsValidRequest(username, args); validation != "" {
 		return validation
 	}
@@ -70,13 +75,16 @@ func DeleteCustomCommandGroup(groupID int64, username, args string) string {
 		return text.InvalidParameter()
 	}
 
-	mysql.DeleteCustomCommand(groupID, sequence)
+	group := mysql.FindGroupByChatID(chatID)
+
+	mysql.DeleteCustomCommand(int(group.ID), sequence)
 
 	return text.SuccessUpdateData()
 }
 
-func RespondCustomCommandGroup(groupID int64, args string) string {
-	commands := mysql.GetAllCustomCommandsByGroupID(groupID)
+func RespondCustomCommandGroup(chatID int64, args string) string {
+	group := mysql.FindGroupByChatID(chatID)
+	commands := mysql.GetAllCustomCommandsByGroupID(int(group.ID))
 
 	for _, c := range commands {
 		if strings.Contains(args, c.Command) {

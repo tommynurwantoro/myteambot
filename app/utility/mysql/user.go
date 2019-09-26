@@ -41,7 +41,7 @@ func IsAdmin(username string) bool {
 }
 
 // InsertUser _
-func InsertUser(username string, groupID int64) {
+func InsertUser(username string, groupID int) {
 	var user models.User
 
 	user.Username = username
@@ -54,7 +54,7 @@ func InsertUser(username string, groupID int64) {
 }
 
 // UpdateUser _
-func UpdateUser(username string, groupID int64) {
+func UpdateUser(username string, groupID int) {
 	user := FindUserByUsername(username)
 
 	user.Username = username
@@ -67,7 +67,7 @@ func UpdateUser(username string, groupID int64) {
 }
 
 // UpsertUser _
-func UpsertUser(username string, groupID int64) {
+func UpsertUser(username string, groupID int) {
 	user := FindUserByUsername(username)
 	if user == nil {
 		InsertUser(username, groupID)

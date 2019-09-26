@@ -13,7 +13,7 @@ import (
 )
 
 // InsertMessageRetro _
-func InsertMessageRetro(username, retroType, message string, groupID int64) {
+func InsertMessageRetro(username, retroType, message string, groupID int) {
 	var retro models.Retro
 
 	retro.Username = username
@@ -28,7 +28,7 @@ func InsertMessageRetro(username, retroType, message string, groupID int64) {
 }
 
 // GetResultRetro _
-func GetResultRetro(date string, groupID int64) []*models.Retro {
+func GetResultRetro(date string, groupID int) []*models.Retro {
 	splitDate := strings.Split(date, "-")
 	recreatedDate := splitDate[2] + "-" + splitDate[1] + "-" + splitDate[0]
 

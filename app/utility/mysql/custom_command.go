@@ -18,7 +18,7 @@ func FindCutomCommand(commandID int64) *models.CustomCommand {
 	return command
 }
 
-func GetAllCustomCommandsByGroupID(groupID int64) []*models.CustomCommand {
+func GetAllCustomCommandsByGroupID(groupID int) []*models.CustomCommand {
 	commands, err := models.CustomCommands(qm.Where("group_id = ?", groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil && err != sql.ErrNoRows {
 		log.Fatal(err)
@@ -27,7 +27,7 @@ func GetAllCustomCommandsByGroupID(groupID int64) []*models.CustomCommand {
 	return commands
 }
 
-func InsertCustomCommand(groupID int64, com, message string) {
+func InsertCustomCommand(groupID int, com, message string) {
 	var command models.CustomCommand
 	command.GroupID = groupID
 	command.Command = com
@@ -39,8 +39,8 @@ func InsertCustomCommand(groupID int64, com, message string) {
 	}
 }
 
-func UpdateCustomCommand(groupID int64, sequence int, message string) {
-	commands := GetAllCustomCommandsByGroupID(int64(groupID))
+func UpdateCustomCommand(groupID int, sequence int, message string) {
+	commands := GetAllCustomCommandsByGroupID(groupID)
 
 	for i, c := range commands {
 		if i == sequence-1 {
@@ -50,8 +50,8 @@ func UpdateCustomCommand(groupID int64, sequence int, message string) {
 	}
 }
 
-func DeleteCustomCommand(groupID int64, sequence int) {
-	commands := GetAllCustomCommandsByGroupID(int64(groupID))
+func DeleteCustomCommand(groupID int, sequence int) {
+	commands := GetAllCustomCommandsByGroupID(groupID)
 
 	for i, c := range commands {
 		if i == sequence-1 {

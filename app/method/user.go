@@ -18,7 +18,7 @@ func AddUser(username, args string, chatID int64) string {
 
 	usernames := GetUsernames(args)
 	for _, username := range usernames {
-		mysql.UpsertUser(username, int64(group.ID))
+		mysql.UpsertUser(username, int(group.ID))
 	}
 
 	return text.SuccessAddMember(usernames)

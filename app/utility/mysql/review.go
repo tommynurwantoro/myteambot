@@ -13,7 +13,7 @@ import (
 )
 
 // GetAllNeedReview _
-func GetAllNeedReview(groupID int64) []*models.Review {
+func GetAllNeedReview(groupID int) []*models.Review {
 	reviews, err := models.Reviews(qm.Where("is_done = ? AND users != '' AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
@@ -23,7 +23,7 @@ func GetAllNeedReview(groupID int64) []*models.Review {
 }
 
 // GetAllNeedQA _
-func GetAllNeedQA(groupID int64) []*models.Review {
+func GetAllNeedQA(groupID int) []*models.Review {
 	reviews, err := models.Reviews(qm.Where("is_done = ? AND users = '' AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
@@ -33,7 +33,7 @@ func GetAllNeedQA(groupID int64) []*models.Review {
 }
 
 // GetAllDone _
-func GetAllDone(groupID int64) []*models.Review {
+func GetAllDone(groupID int) []*models.Review {
 	reviews, err := models.Reviews(qm.Where("is_done = ? AND group_id = ?", true, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
@@ -43,7 +43,7 @@ func GetAllDone(groupID int64) []*models.Review {
 }
 
 // InsertReview _
-func InsertReview(title, url, users string, groupID int64) {
+func InsertReview(title, url, users string, groupID int) {
 	var review models.Review
 
 	review.URL = url
@@ -76,7 +76,7 @@ func UpdateReview(ID uint, title, url, users string) {
 }
 
 // UpdateToDoneReview _
-func UpdateToDoneReview(sequence int, groupID int64, user string, force bool) bool {
+func UpdateToDoneReview(sequence int, groupID int, user string, force bool) bool {
 	reviews := GetAllNeedReview(groupID)
 
 	for i, review := range reviews {
@@ -99,7 +99,7 @@ func UpdateToDoneReview(sequence int, groupID int64, user string, force bool) bo
 	return false
 }
 
-func UpdateToDoneQA(sequence int, groupID int64) bool {
+func UpdateToDoneQA(sequence int, groupID int) bool {
 	reviews := GetAllNeedQA(groupID)
 
 	for i, review := range reviews {
