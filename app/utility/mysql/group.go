@@ -27,6 +27,15 @@ func FindGroup(ID uint) *models.Group {
 	return group
 }
 
+func GetAllGroups() []*models.Group {
+	groups, err := models.Groups().AllG()
+	if err != nil && err != sql.ErrNoRows {
+		panic(err)
+	}
+
+	return groups
+}
+
 func FindGroupByChatID(chatID int64) *models.Group {
 	group, err := models.Groups(qm.Where("chat_id = ?", chatID)).OneG()
 	if err != nil && err != sql.ErrNoRows {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/bot/myteambot/app"
 	"github.com/bot/myteambot/app/text"
+	"github.com/bot/myteambot/app/utility/mysql"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -41,6 +42,7 @@ func Init() {
 	app.Bot.Handle(c.ListCommand().Name, ListCommand)
 	app.Bot.Handle(c.UbahCommand().Name, UpdateCommand)
 	app.Bot.Handle(c.HapusCommand().Name, DeleteCommand)
+	app.Bot.Handle(c.BlastMessage().Name, BlastMessageToAllGroup)
 	app.Bot.Handle(tb.OnText, RespondAllText)
 }
 
@@ -153,5 +155,23 @@ func RespondAllText(m *tb.Message) {
 	respond := RespondCustomCommandGroup(m.Chat.ID, m.Text)
 	if respond != "" {
 		app.Bot.Send(m.Chat, respond)
+	}
+}
+
+func BlastMessageToAllGroup(m *tb.Message) {
+	if !mysql.IsAdmin(m.Sender.Username) {
+		app.Bot.Send(m.Chat, text.UserNotEligible())
+		return
+	}
+
+	if m.Payload == "" {
+		app.Bot.Send(m.Chat, text.InvalidParameter())
+		return
+	}
+
+	allGroups := mysql.GetAllGroups()
+	for _, group := range allGroups {
+		m.Chat.ID = group.ChatID
+		app.Bot.Send(m.Chat, m.Payload)
 	}
 }

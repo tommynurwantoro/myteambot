@@ -52,6 +52,7 @@ func (c *Command) All() []Command {
 		c.ListCommand(),
 		c.UbahCommand(),
 		c.HapusCommand(),
+		c.BlastMessage(),
 	}
 }
 
@@ -141,4 +142,8 @@ func (c *Command) UbahCommand() Command {
 
 func (c *Command) HapusCommand() Command {
 	return Command{"/hapus_command", "{urutan} Hapus isi pengingat yang ada di list command"}
+}
+
+func (c *Command) BlastMessage() Command {
+	return Command{"/blast", "{pesan} Kirim pesan ke semua group yang terdaftar"}
 }
