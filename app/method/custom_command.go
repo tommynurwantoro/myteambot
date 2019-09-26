@@ -36,7 +36,7 @@ func ListCustomCommandGroup(chatID int64, username string) string {
 	customCommands := mysql.GetAllCustomCommandsByGroupID(int(group.ID))
 
 	if len(customCommands) == 0 {
-		return "Belum ada custom command nih, pakai command /simpan_command aja"
+		return text.CustomCommandNotFound()
 	}
 
 	return fmt.Sprintf("Ini list command tim kamu:\n%s", GenerateCustomCommands(customCommands))
@@ -84,11 +84,16 @@ func DeleteCustomCommandGroup(chatID int64, username, args string) string {
 
 func RespondCustomCommandGroup(chatID int64, args string) string {
 	group := mysql.FindGroupByChatID(chatID)
-	commands := mysql.GetAllCustomCommandsByGroupID(int(group.ID))
+	if group == nil {
+		return ""
+	}
 
-	for _, c := range commands {
-		if strings.Contains(args, c.Command) {
-			return c.Message
+	commands := mysql.GetAllCustomCommandsByGroupID(int(group.ID))
+	if commands != nil {
+		for _, c := range commands {
+			if strings.Contains(args, c.Command) {
+				return c.Message
+			}
 		}
 	}
 
