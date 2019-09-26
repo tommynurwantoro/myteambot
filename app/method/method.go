@@ -136,19 +136,35 @@ func SendCustomChat(m *tb.Message) {
 }
 
 func SaveCommand(m *tb.Message) {
-	app.Bot.Send(m.Chat, SaveCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	if m.Private() {
+		app.Bot.Send(m.Chat, text.CommandGroupOnly())
+	} else {
+		app.Bot.Send(m.Chat, SaveCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	}
 }
 
 func ListCommand(m *tb.Message) {
-	app.Bot.Send(m.Chat, ListCustomCommandGroup(m.Chat.ID, m.Sender.Username))
+	if m.Private() {
+		app.Bot.Send(m.Chat, text.CommandGroupOnly())
+	} else {
+		app.Bot.Send(m.Chat, ListCustomCommandGroup(m.Chat.ID, m.Sender.Username))
+	}
 }
 
 func UpdateCommand(m *tb.Message) {
-	app.Bot.Send(m.Chat, UpdateCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	if m.Private() {
+		app.Bot.Send(m.Chat, text.CommandGroupOnly())
+	} else {
+		app.Bot.Send(m.Chat, UpdateCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	}
 }
 
 func DeleteCommand(m *tb.Message) {
-	app.Bot.Send(m.Chat, DeleteCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	if m.Private() {
+		app.Bot.Send(m.Chat, text.CommandGroupOnly())
+	} else {
+		app.Bot.Send(m.Chat, DeleteCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	}
 }
 
 func RespondAllText(m *tb.Message) {
