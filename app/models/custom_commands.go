@@ -23,7 +23,7 @@ import (
 // CustomCommand is an object representing the database table.
 type CustomCommand struct {
 	ID        uint      `boil:"id" json:"id" toml:"id" yaml:"id"`
-	GroupID   int64     `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
+	GroupID   int       `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
 	Command   string    `boil:"command" json:"command" toml:"command" yaml:"command"`
 	Message   string    `boil:"message" json:"message" toml:"message" yaml:"message"`
 	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
@@ -60,25 +60,25 @@ func (w whereHelperuint) LTE(x uint) qm.QueryMod { return qmhelper.Where(w.field
 func (w whereHelperuint) GT(x uint) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
 func (w whereHelperuint) GTE(x uint) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
 
-type whereHelperint64 struct{ field string }
+type whereHelperint struct{ field string }
 
-func (w whereHelperint64) EQ(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperint64) NEQ(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperint64) LT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperint64) LTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperint64) GT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperint64) GTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
+func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
+func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
+func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
+func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
+func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
+func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
 
 var CustomCommandWhere = struct {
 	ID        whereHelperuint
-	GroupID   whereHelperint64
+	GroupID   whereHelperint
 	Command   whereHelperstring
 	Message   whereHelperstring
 	CreatedAt whereHelpertime_Time
 	UpdatedAt whereHelpertime_Time
 }{
 	ID:        whereHelperuint{field: `id`},
-	GroupID:   whereHelperint64{field: `group_id`},
+	GroupID:   whereHelperint{field: `group_id`},
 	Command:   whereHelperstring{field: `command`},
 	Message:   whereHelperstring{field: `message`},
 	CreatedAt: whereHelpertime_Time{field: `created_at`},

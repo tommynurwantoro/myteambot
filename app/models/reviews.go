@@ -27,7 +27,7 @@ type Review struct {
 	IsDone    bool      `boil:"is_done" json:"is_done" toml:"is_done" yaml:"is_done"`
 	Title     string    `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Users     string    `boil:"users" json:"users" toml:"users" yaml:"users"`
-	GroupID   int64     `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
+	GroupID   int       `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
 	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
@@ -72,7 +72,7 @@ var ReviewWhere = struct {
 	IsDone    whereHelperbool
 	Title     whereHelperstring
 	Users     whereHelperstring
-	GroupID   whereHelperint64
+	GroupID   whereHelperint
 	CreatedAt whereHelpertime_Time
 	UpdatedAt whereHelpertime_Time
 }{
@@ -81,7 +81,7 @@ var ReviewWhere = struct {
 	IsDone:    whereHelperbool{field: `is_done`},
 	Title:     whereHelperstring{field: `title`},
 	Users:     whereHelperstring{field: `users`},
-	GroupID:   whereHelperint64{field: `group_id`},
+	GroupID:   whereHelperint{field: `group_id`},
 	CreatedAt: whereHelpertime_Time{field: `created_at`},
 	UpdatedAt: whereHelpertime_Time{field: `updated_at`},
 }

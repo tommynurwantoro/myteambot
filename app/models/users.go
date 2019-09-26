@@ -25,7 +25,7 @@ type User struct {
 	ID       uint   `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Username string `boil:"username" json:"username" toml:"username" yaml:"username"`
 	IsAdmin  bool   `boil:"is_admin" json:"is_admin" toml:"is_admin" yaml:"is_admin"`
-	GroupID  int64  `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
+	GroupID  int    `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
 
 	R *userR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L userL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -49,12 +49,12 @@ var UserWhere = struct {
 	ID       whereHelperuint
 	Username whereHelperstring
 	IsAdmin  whereHelperbool
-	GroupID  whereHelperint64
+	GroupID  whereHelperint
 }{
 	ID:       whereHelperuint{field: `id`},
 	Username: whereHelperstring{field: `username`},
 	IsAdmin:  whereHelperbool{field: `is_admin`},
-	GroupID:  whereHelperint64{field: `group_id`},
+	GroupID:  whereHelperint{field: `group_id`},
 }
 
 // UserRels is where relationship names are stored.

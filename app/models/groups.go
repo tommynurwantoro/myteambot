@@ -42,6 +42,15 @@ var GroupColumns = struct {
 
 // Generated where
 
+type whereHelperint64 struct{ field string }
+
+func (w whereHelperint64) EQ(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
+func (w whereHelperint64) NEQ(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
+func (w whereHelperint64) LT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
+func (w whereHelperint64) LTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
+func (w whereHelperint64) GT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
+func (w whereHelperint64) GTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
+
 var GroupWhere = struct {
 	ID     whereHelperuint
 	ChatID whereHelperint64
@@ -70,8 +79,8 @@ type groupL struct{}
 
 var (
 	groupColumns               = []string{"id", "chat_id", "name"}
-	groupColumnsWithoutDefault = []string{"chat_id", "name"}
-	groupColumnsWithDefault    = []string{"id"}
+	groupColumnsWithoutDefault = []string{"id", "chat_id", "name"}
+	groupColumnsWithDefault    = []string{}
 	groupPrimaryKeyColumns     = []string{"id"}
 )
 
@@ -435,26 +444,15 @@ func (o *Group) Insert(exec boil.Executor, columns boil.Columns) error {
 		fmt.Fprintln(boil.DebugWriter, vals)
 	}
 
-	result, err := exec.Exec(cache.query, vals...)
+	_, err = exec.Exec(cache.query, vals...)
 
 	if err != nil {
 		return errors.Wrap(err, "models: unable to insert into groups")
 	}
 
-	var lastID int64
 	var identifierCols []interface{}
 
 	if len(cache.retMapping) == 0 {
-		goto CacheNoHooks
-	}
-
-	lastID, err = result.LastInsertId()
-	if err != nil {
-		return ErrSyncFail
-	}
-
-	o.ID = uint(lastID)
-	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == groupMapping["ID"] {
 		goto CacheNoHooks
 	}
 
@@ -714,27 +712,16 @@ func (o *Group) Upsert(exec boil.Executor, updateColumns, insertColumns boil.Col
 		fmt.Fprintln(boil.DebugWriter, vals)
 	}
 
-	result, err := exec.Exec(cache.query, vals...)
+	_, err = exec.Exec(cache.query, vals...)
 
 	if err != nil {
 		return errors.Wrap(err, "models: unable to upsert for groups")
 	}
 
-	var lastID int64
 	var uniqueMap []uint64
 	var nzUniqueCols []interface{}
 
 	if len(cache.retMapping) == 0 {
-		goto CacheNoHooks
-	}
-
-	lastID, err = result.LastInsertId()
-	if err != nil {
-		return ErrSyncFail
-	}
-
-	o.ID = uint(lastID)
-	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == groupMapping["id"] {
 		goto CacheNoHooks
 	}
 
