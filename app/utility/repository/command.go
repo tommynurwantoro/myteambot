@@ -1,4 +1,4 @@
-package method
+package repository
 
 /**
 start - Tentang bot ini
@@ -15,6 +15,10 @@ sudah_direview_semua - {urutan} Ngubah antrian review untuk yang sudah direview 
 tambah_user_review - {urutan#telegram-users} Nambahin user ke antrian review
 antrian_qa - Nampilin semua antrian PR yang belum dites
 sudah_dites - {urutan} Ngubah antrian QA untuk yang sudah dites
+simpan_command - {kata#pesan} Kalau ada pengingat dengan perintah tertentu bisa pakai command ini loh
+list_command - List custom command yang ada di group kamu
+ubah_command - {urutan#pesan} Ubah isi pengingat yang ada di list command
+hapus_command - {urutan} Hapus isi pengingat yang ada di list command
 **/
 
 // Command _

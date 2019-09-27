@@ -1,4 +1,4 @@
-package method
+package utility
 
 import (
 	"bytes"
@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/bot/myteambot/app/models"
+	"github.com/bot/myteambot/app/utility/repository"
 )
 
 // GetUsernames _
@@ -38,10 +39,10 @@ func GenerateHTMLReview(reviews []*models.Review) string {
 }
 
 // GenerateAllCommands _
-func GenerateAllCommands(commands []Command) string {
+func GenerateAllCommands() string {
 	var buffer bytes.Buffer
 
-	for _, command := range commands {
+	for _, command := range repository.GetCommand().All() {
 		buffer.WriteString(fmt.Sprintf("%s %s\n", command.Name, command.Description))
 	}
 

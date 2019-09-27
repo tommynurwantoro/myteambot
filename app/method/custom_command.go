@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bot/myteambot/app/text"
-	"github.com/bot/myteambot/app/utility/mysql"
+	"github.com/bot/myteambot/app/utility"
+	"github.com/bot/myteambot/app/utility/repository"
 )
 
 func SaveCustomCommandGroup(chatID int64, username, args string) string {
@@ -17,14 +17,14 @@ func SaveCustomCommandGroup(chatID int64, username, args string) string {
 	split := strings.Split(args, "#")
 
 	if len(split) < 2 {
-		return text.InvalidParameter()
+		return utility.InvalidParameter()
 	}
 
-	group := mysql.FindGroupByChatID(chatID)
+	group := repository.FindGroupByChatID(chatID)
 
-	mysql.InsertCustomCommand(int(group.ID), split[0], split[1])
+	repository.InsertCustomCommand(int(group.ID), split[0], split[1])
 
-	return text.SuccessInsertData()
+	return utility.SuccessInsertData()
 }
 
 func ListCustomCommandGroup(chatID int64, username string) string {
@@ -32,14 +32,14 @@ func ListCustomCommandGroup(chatID int64, username string) string {
 		return validation
 	}
 
-	group := mysql.FindGroupByChatID(chatID)
-	customCommands := mysql.GetAllCustomCommandsByGroupID(int(group.ID))
+	group := repository.FindGroupByChatID(chatID)
+	customCommands := repository.GetAllCustomCommandsByGroupID(int(group.ID))
 
 	if len(customCommands) == 0 {
-		return text.CustomCommandNotFound()
+		return utility.CustomCommandNotFound()
 	}
 
-	return fmt.Sprintf("Ini list command tim kamu:\n%s", GenerateCustomCommands(customCommands))
+	return fmt.Sprintf("Ini list command tim kamu:\n%s", utility.GenerateCustomCommands(customCommands))
 }
 
 func UpdateCustomCommandGroup(chatID int64, username, args string) string {
@@ -50,19 +50,19 @@ func UpdateCustomCommandGroup(chatID int64, username, args string) string {
 	split := strings.Split(args, "#")
 
 	if len(split) < 2 {
-		return text.InvalidParameter()
+		return utility.InvalidParameter()
 	}
 
 	sequence, err := strconv.Atoi(split[0])
 	if err != nil {
-		return text.InvalidParameter()
+		return utility.InvalidParameter()
 	}
 
-	group := mysql.FindGroupByChatID(chatID)
+	group := repository.FindGroupByChatID(chatID)
 
-	mysql.UpdateCustomCommand(int(group.ID), sequence, split[1])
+	repository.UpdateCustomCommand(int(group.ID), sequence, split[1])
 
-	return text.SuccessUpdateData()
+	return utility.SuccessUpdateData()
 }
 
 func DeleteCustomCommandGroup(chatID int64, username, args string) string {
@@ -72,23 +72,23 @@ func DeleteCustomCommandGroup(chatID int64, username, args string) string {
 
 	sequence, err := strconv.Atoi(args)
 	if err != nil {
-		return text.InvalidParameter()
+		return utility.InvalidParameter()
 	}
 
-	group := mysql.FindGroupByChatID(chatID)
+	group := repository.FindGroupByChatID(chatID)
 
-	mysql.DeleteCustomCommand(int(group.ID), sequence)
+	repository.DeleteCustomCommand(int(group.ID), sequence)
 
-	return text.SuccessUpdateData()
+	return utility.SuccessUpdateData()
 }
 
 func RespondCustomCommandGroup(chatID int64, args string) string {
-	group := mysql.FindGroupByChatID(chatID)
+	group := repository.FindGroupByChatID(chatID)
 	if group == nil {
 		return ""
 	}
 
-	commands := mysql.GetAllCustomCommandsByGroupID(int(group.ID))
+	commands := repository.GetAllCustomCommandsByGroupID(int(group.ID))
 	if commands != nil {
 		for _, c := range commands {
 			if strings.Contains(args, c.Command) {

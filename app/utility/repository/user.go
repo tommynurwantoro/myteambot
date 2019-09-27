@@ -1,12 +1,11 @@
-package mysql
+package repository
 
 import (
 	"database/sql"
 	"log"
 
-	"github.com/volatiletech/sqlboiler/boil"
-
 	"github.com/bot/myteambot/app/models"
+	"github.com/volatiletech/sqlboiler/boil"
 	"github.com/volatiletech/sqlboiler/queries/qm"
 )
 

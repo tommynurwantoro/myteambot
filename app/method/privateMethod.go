@@ -1,49 +1,44 @@
 package method
 
 import (
-	"github.com/bot/myteambot/app"
-	"github.com/bot/myteambot/app/text"
+	"github.com/bot/myteambot/app/utility"
+	"github.com/bot/myteambot/app/utility/repository"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 type PrivateMethod struct {
-	Bot *tb.Bot
-}
-
-func NewPrivateMethod() *PrivateMethod {
-	return &PrivateMethod{
-		Bot: app.Bot,
-	}
+	Bot     *tb.Bot
+	Command *repository.Command
 }
 
 func (p *PrivateMethod) Glad(m *tb.Message) {
-	p.Response(m, GetCommand().Glad().Name)
+	p.Response(m, p.Command.Glad().Name)
 }
 
 func (p *PrivateMethod) Sad(m *tb.Message) {
-	p.Response(m, GetCommand().Sad().Name)
+	p.Response(m, p.Command.Sad().Name)
 }
 
 func (p *PrivateMethod) Mad(m *tb.Message) {
-	p.Response(m, GetCommand().Mad().Name)
+	p.Response(m, p.Command.Mad().Name)
 }
 
 // Response _
 func (p *PrivateMethod) Response(m *tb.Message, command string) {
 	if !m.Private() {
-		app.Bot.Send(m.Chat, text.RestrictGroupRetro())
+		p.Bot.Send(m.Chat, utility.RestrictGroupRetro())
 		return
 	}
 
 	args := m.Payload
-	c := GetCommand()
+	c := p.Command
 
 	switch command {
 	case c.Glad().Name:
-		app.Bot.Send(m.Sender, InsertRetroMessage(m.Sender.Username, "glad", args))
+		p.Bot.Send(m.Sender, InsertRetroMessage(m.Sender.Username, "glad", args))
 	case c.Sad().Name:
-		app.Bot.Send(m.Sender, InsertRetroMessage(m.Sender.Username, "sad", args))
+		p.Bot.Send(m.Sender, InsertRetroMessage(m.Sender.Username, "sad", args))
 	case c.Mad().Name:
-		app.Bot.Send(m.Sender, InsertRetroMessage(m.Sender.Username, "mad", args))
+		p.Bot.Send(m.Sender, InsertRetroMessage(m.Sender.Username, "mad", args))
 	}
 }

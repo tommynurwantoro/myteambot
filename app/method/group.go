@@ -3,31 +3,31 @@ package method
 import (
 	"strings"
 
-	"github.com/bot/myteambot/app/text"
-	"github.com/bot/myteambot/app/utility/mysql"
+	"github.com/bot/myteambot/app/utility"
+	"github.com/bot/myteambot/app/utility/repository"
 )
 
 // AddGroup _
 func AddGroup(chatID int64, name string) string {
-	mysql.UpsertGroup(chatID, name)
+	repository.UpsertGroup(chatID, name)
 
-	return text.SuccessInitGroup(name)
+	return utility.SuccessInitGroup(name)
 }
 
 // SendChatSpecificGroup _
 func SendChatToSpecificGroup(username, args string) (string, string) {
-	if !mysql.IsUserEligible(username) {
-		return "", text.UserNotEligible()
+	if !repository.IsUserEligible(username) {
+		return "", utility.UserNotEligible()
 	}
 
 	if args == "" {
-		return "", text.InvalidParameter()
+		return "", utility.InvalidParameter()
 	}
 
 	split := strings.Split(args, "#")
 
 	if len(split) < 2 {
-		return "", text.InvalidParameter()
+		return "", utility.InvalidParameter()
 	}
 
 	return split[0], split[1]

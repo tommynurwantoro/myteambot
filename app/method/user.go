@@ -1,8 +1,8 @@
 package method
 
 import (
-	"github.com/bot/myteambot/app/text"
-	"github.com/bot/myteambot/app/utility/mysql"
+	"github.com/bot/myteambot/app/utility"
+	"github.com/bot/myteambot/app/utility/repository"
 )
 
 // AddUser _
@@ -11,15 +11,15 @@ func AddUser(username, args string, chatID int64) string {
 		return validation
 	}
 
-	group := mysql.FindGroupByChatID(chatID)
+	group := repository.FindGroupByChatID(chatID)
 	if group == nil {
-		return text.GroupNotFound()
+		return utility.GroupNotFound()
 	}
 
-	usernames := GetUsernames(args)
+	usernames := utility.GetUsernames(args)
 	for _, username := range usernames {
-		mysql.UpsertUser(username, int(group.ID))
+		repository.UpsertUser(username, int(group.ID))
 	}
 
-	return text.SuccessAddMember(usernames)
+	return utility.SuccessAddMember(usernames)
 }

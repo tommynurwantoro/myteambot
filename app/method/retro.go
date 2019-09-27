@@ -4,30 +4,30 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bot/myteambot/app/text"
-	"github.com/bot/myteambot/app/utility/mysql"
+	"github.com/bot/myteambot/app/utility"
+	"github.com/bot/myteambot/app/utility/repository"
 )
 
 // InsertRetroMessage _
 func InsertRetroMessage(username string, _type string, args string) string {
-	if !mysql.IsUserEligible(username) {
-		return text.UserNotEligible()
+	if !repository.IsUserEligible(username) {
+		return utility.UserNotEligible()
 	}
 
 	if args == "" {
-		return text.InvalidRetroMessage()
+		return utility.InvalidRetroMessage()
 	}
 
-	user := mysql.FindUserByUsername(username)
+	user := repository.FindUserByUsername(username)
 
-	mysql.InsertMessageRetro(username, _type, args, user.GroupID)
-	return text.SuccessInsertMessage()
+	repository.InsertMessageRetro(username, _type, args, user.GroupID)
+	return utility.SuccessInsertMessage()
 }
 
 // GetResultRetro _
 func GetResultRetro(username, args string) string {
-	if !mysql.IsUserEligible(username) {
-		return text.UserNotEligible()
+	if !repository.IsUserEligible(username) {
+		return utility.UserNotEligible()
 	}
 
 	if args == "" {
@@ -35,8 +35,8 @@ func GetResultRetro(username, args string) string {
 		args = fmt.Sprintf("%d-%02d-%d", day, int(month), year)
 	}
 
-	user := mysql.FindUserByUsername(username)
+	user := repository.FindUserByUsername(username)
 
-	results := mysql.GetResultRetro(args, user.GroupID)
-	return "Ini hasil retro untuk tanggal " + args + "\n\n" + text.GenerateRetroResult(results)
+	results := repository.GetResultRetro(args, user.GroupID)
+	return "Ini hasil retro untuk tanggal " + args + "\n\n" + utility.GenerateRetroResult(results)
 }
