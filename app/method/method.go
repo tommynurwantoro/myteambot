@@ -1,7 +1,6 @@
 package method
 
 import (
-	"log"
 	"strconv"
 
 	"github.com/bot/myteambot/app"
@@ -29,7 +28,6 @@ func Init() {
 	app.Bot.Handle(command.TambahUserReview().Name, TambahUserReview)
 	app.Bot.Handle(command.AntrianQA().Name, AntrianQA)
 	app.Bot.Handle(command.SudahDites().Name, SudahDites)
-	app.Bot.Handle(command.InitGroup().Name, InitGroup)
 	app.Bot.Handle(command.AddUser().Name, AddEligibleUser)
 	app.Bot.Handle(tb.OnAddedToGroup, GreetingFromBot)
 	app.Bot.Handle(tb.OnUserJoined, GreetNewJoinedUser)
@@ -93,15 +91,6 @@ func SudahDites(m *tb.Message) {
 	app.Bot.Send(m.Chat, UpdateDoneQA(m.Payload, m.Sender.Username), tb.ModeHTML, tb.NoPreview)
 }
 
-func InitGroup(m *tb.Message) {
-	if m.Private() {
-		app.Bot.Send(m.Chat, utility.CommandGroupOnly())
-	} else {
-		log.Println(m.Chat.ID)
-		app.Bot.Send(m.Chat, AddGroup(m.Chat.ID, m.Chat.Title))
-	}
-}
-
 func AddEligibleUser(m *tb.Message) {
 	if m.Private() {
 		app.Bot.Send(m.Chat, utility.CommandGroupOnly())
@@ -113,6 +102,7 @@ func AddEligibleUser(m *tb.Message) {
 }
 
 func GreetingFromBot(m *tb.Message) {
+	AddGroup(m.Chat.ID, m.Chat.Title)
 	app.Bot.Send(m.Chat, utility.GreetingFromBot())
 }
 
