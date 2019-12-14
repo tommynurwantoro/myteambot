@@ -2,9 +2,6 @@ package utility
 
 import (
 	"fmt"
-	"strings"
-
-	"github.com/bot/myteambot/app/models"
 )
 
 // UserNotEligible _
@@ -43,54 +40,6 @@ func InvalidDate() string {
 	return "Tanggalnya tolong dicek lagi ya, udah sesuai format dd-mm-yyyy belum?"
 }
 
-// StartRetro _
-func StartRetro() string {
-	return "Untuk sesi retrospective, silakan gunakan perintah di bawah ini yaa:\n" +
-		"/glad pesan kamu\n" +
-		"/sad pesan kamu\n" +
-		"/mad pesan kamu\n\n" +
-		"Tenang aja hasilnya anonymous kok.\n" +
-		"Untuk mendapatkan hasilnya, kamu bisa gunakan perintah /result_retro dd-mm-yyyy\n"
-}
-
-// SuccessInsertMessage _
-func SuccessInsertMessage() string {
-	return "Pesan kamu udah aku catat ke database yaa.\nKalau mau aku catatin pesan lain juga boleh pake perintah yang sama kayak sebelumnya."
-}
-
-// RestrictGroupRetro _
-func RestrictGroupRetro() string {
-	return "Kalau mau gunakan perintah ini DM aku aja ya, biar gak diliat yang lain. 😄"
-}
-
-// InvalidRetroMessage _
-func InvalidRetroMessage() string {
-	return "Pesannya belum ada tuh. Coba lagi ya.."
-}
-
-// GenerateRetroResult _
-func GenerateRetroResult(results []*models.Retro) string {
-	glad := "Glad:\n"
-	sad := "\nSad:\n"
-	mad := "\nMad:\n"
-	for _, result := range results {
-		if result.Type == "mad" {
-			mad += "- " + result.Message.String + "\n"
-		} else if result.Type == "sad" {
-			sad += "- " + result.Message.String + "\n"
-		} else {
-			glad += "- " + result.Message.String + "\n"
-		}
-	}
-
-	return glad + sad + mad
-}
-
-// SuccessAddMember _
-func SuccessAddMember(usernames []string) string {
-	return "Berhasil menambahkan " + strings.Join(usernames[:], ", ")
-}
-
 // InvalidParameter _
 func InvalidParameter() string {
 	return "Parameternya belum bener tuh, coba dicek lagi ya"
@@ -114,11 +63,6 @@ func InvalidSequece() string {
 // CheckPrivateMessage _
 func CheckPrivateMessage() string {
 	return "Cek DM kamu yaa"
-}
-
-// SuccessInitGroup _
-func SuccessInitGroup(groupName string) string {
-	return fmt.Sprintf("Berhasil menambahkan group %s", groupName)
 }
 
 func CommandGroupOnly() string {

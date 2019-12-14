@@ -11,16 +11,10 @@ import (
 
 func Init() {
 	var command *repository.Command
-	private := PrivateMethod{Bot: app.Bot}
 
 	app.Bot.Handle(command.Start().Name, Start)
 	app.Bot.Handle(command.Help().Name, Help)
 	app.Bot.Handle(command.Halo().Name, Halo)
-	app.Bot.Handle(command.Retro().Name, Retro)
-	app.Bot.Handle(command.Glad().Name, private.Glad)
-	app.Bot.Handle(command.Sad().Name, private.Sad)
-	app.Bot.Handle(command.Mad().Name, private.Mad)
-	app.Bot.Handle(command.ResultRetro().Name, ResultRetro)
 	app.Bot.Handle(command.TitipReview().Name, TitipReview)
 	app.Bot.Handle(command.AntrianReview().Name, AntrianReview)
 	app.Bot.Handle(command.SudahDireview().Name, SudahDireview)
@@ -28,15 +22,14 @@ func Init() {
 	app.Bot.Handle(command.TambahUserReview().Name, TambahUserReview)
 	app.Bot.Handle(command.AntrianQA().Name, AntrianQA)
 	app.Bot.Handle(command.SudahDites().Name, SudahDites)
-	app.Bot.Handle(command.AddUser().Name, AddEligibleUser)
-	app.Bot.Handle(tb.OnAddedToGroup, GreetingFromBot)
-	app.Bot.Handle(tb.OnUserJoined, GreetNewJoinedUser)
 	app.Bot.Handle(command.SendChat().Name, SendCustomChat)
 	app.Bot.Handle(command.SimpanCommand().Name, SaveCommand)
 	app.Bot.Handle(command.ListCommand().Name, ListCommand)
 	app.Bot.Handle(command.UbahCommand().Name, UpdateCommand)
 	app.Bot.Handle(command.HapusCommand().Name, DeleteCommand)
 	app.Bot.Handle(command.BlastMessage().Name, BlastMessageToAllGroup)
+	app.Bot.Handle(tb.OnAddedToGroup, GreetingFromBot)
+	app.Bot.Handle(tb.OnUserJoined, GreetNewJoinedUser)
 	app.Bot.Handle(tb.OnText, RespondAllText)
 }
 
@@ -50,17 +43,6 @@ func Help(m *tb.Message) {
 
 func Halo(m *tb.Message) {
 	app.Bot.Send(m.Chat, utility.Halo(m.Sender.Username))
-}
-
-func Retro(m *tb.Message) {
-	if !m.Private() {
-		app.Bot.Send(m.Chat, utility.CheckPrivateMessage())
-	}
-	app.Bot.Send(m.Sender, utility.StartRetro())
-}
-
-func ResultRetro(m *tb.Message) {
-	app.Bot.Send(m.Chat, GetResultRetro(m.Sender.Username, m.Payload))
 }
 
 func TitipReview(m *tb.Message) {
@@ -89,16 +71,6 @@ func AntrianQA(m *tb.Message) {
 
 func SudahDites(m *tb.Message) {
 	app.Bot.Send(m.Chat, UpdateDoneQA(m.Payload, m.Sender.Username), tb.ModeHTML, tb.NoPreview)
-}
-
-func AddEligibleUser(m *tb.Message) {
-	if m.Private() {
-		app.Bot.Send(m.Chat, utility.CommandGroupOnly())
-	} else if !IsValidGroup(m.Chat.ID) {
-		app.Bot.Send(m.Chat, utility.GroupNotFound())
-	} else {
-		app.Bot.Send(m.Chat, AddUser(m.Sender.Username, m.Payload, m.Chat.ID))
-	}
 }
 
 func GreetingFromBot(m *tb.Message) {

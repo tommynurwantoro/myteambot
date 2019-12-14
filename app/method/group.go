@@ -8,10 +8,8 @@ import (
 )
 
 // AddGroup _
-func AddGroup(chatID int64, name string) string {
+func AddGroup(chatID int64, name string) {
 	repository.UpsertGroup(chatID, name)
-
-	return utility.SuccessInitGroup(name)
 }
 
 // SendChatSpecificGroup _

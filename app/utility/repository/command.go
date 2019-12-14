@@ -37,13 +37,6 @@ func (c *Command) All() []Command {
 		c.Start(),
 		c.Help(),
 		c.Halo(),
-		c.InitGroup(),
-		c.AddUser(),
-		c.Retro(),
-		c.Glad(),
-		c.Sad(),
-		c.Mad(),
-		c.ResultRetro(),
 		c.TitipReview(),
 		c.AntrianReview(),
 		c.SudahDireview(),
@@ -68,26 +61,6 @@ func (c *Command) Help() Command {
 
 func (c *Command) Halo() Command {
 	return Command{"/halo", "Cuma buat nyapa aja"}
-}
-
-func (c *Command) Retro() Command {
-	return Command{"/retro", "Bantuan untuk perintah retrospective"}
-}
-
-func (c *Command) Glad() Command {
-	return Command{"/glad", "Pesan glad untuk retro"}
-}
-
-func (c *Command) Sad() Command {
-	return Command{"/sad", "Pesan sad untuk retro"}
-}
-
-func (c *Command) Mad() Command {
-	return Command{"/mad", "Pesan mad untuk retro"}
-}
-
-func (c *Command) ResultRetro() Command {
-	return Command{"/result_retro", "{dd-mm-yyyy} Dapetin hasil retrospective, jangan lupa kasih tanggalnya ya"}
 }
 
 func (c *Command) TitipReview() Command {
@@ -116,14 +89,6 @@ func (c *Command) AntrianQA() Command {
 
 func (c *Command) SudahDites() Command {
 	return Command{"/sudah_dites", "{urutan} Ngubah antrian QA untuk yang sudah dites"}
-}
-
-func (c *Command) InitGroup() Command {
-	return Command{"/init_group", "Initialize group ke dalam bot"}
-}
-
-func (c *Command) AddUser() Command {
-	return Command{"/add_user", "Menambah user agar dapat menggunakan bot"}
 }
 
 func (c *Command) SendChat() Command {
