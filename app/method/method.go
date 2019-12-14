@@ -47,23 +47,58 @@ func Halo(m *tb.Message) {
 }
 
 func TitipReview(m *tb.Message) {
-	app.Bot.Send(m.Chat, AddReview(m.Sender.Username, m.Payload))
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, AddReview(m.Chat.ID, m.Payload))
 }
 
 func AntrianReview(m *tb.Message) {
-	app.Bot.Send(m.Chat, GetReviewQueue(m.Sender.Username), tb.ModeHTML, tb.NoPreview)
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, GetReviewQueue(m.Chat.ID), tb.ModeHTML, tb.NoPreview)
 }
 
 func SudahDireview(m *tb.Message) {
-	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, false), tb.ModeHTML, tb.NoPreview)
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, UpdateDoneReview(m.Chat.ID, m.Sender.Username, m.Payload, false), tb.ModeHTML, tb.NoPreview)
 }
 
 func SudahDireviewSemua(m *tb.Message) {
-	app.Bot.Send(m.Chat, UpdateDoneReview(m.Payload, m.Sender.Username, true), tb.ModeHTML, tb.NoPreview)
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, UpdateDoneReview(m.Chat.ID, m.Sender.Username, m.Payload, true), tb.ModeHTML, tb.NoPreview)
 }
 
 func TambahUserReview(m *tb.Message) {
-	app.Bot.Send(m.Chat, AddUserReview(m.Payload, m.Sender.Username), tb.ModeHTML, tb.NoPreview)
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, AddUserReview(m.Chat.ID, m.Payload), tb.ModeHTML, tb.NoPreview)
 }
 
 func SiapQA(m *tb.Message) {
@@ -78,11 +113,25 @@ func SiapQA(m *tb.Message) {
 }
 
 func AntrianQA(m *tb.Message) {
-	app.Bot.Send(m.Chat, GetQAQueue(m.Sender.Username), tb.ModeHTML, tb.NoPreview)
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, GetQAQueue(m.Chat.ID), tb.ModeHTML, tb.NoPreview)
 }
 
 func SudahDites(m *tb.Message) {
-	app.Bot.Send(m.Chat, UpdateDoneQA(m.Payload, m.Sender.Username), tb.ModeHTML, tb.NoPreview)
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, UpdateDoneQA(m.Chat.ID, m.Payload), tb.ModeHTML, tb.NoPreview)
 }
 
 func GreetingFromBot(m *tb.Message) {
@@ -108,43 +157,47 @@ func SendCustomChat(m *tb.Message) {
 }
 
 func SaveCommand(m *tb.Message) {
-	if m.Private() {
-		app.Bot.Send(m.Chat, utility.CommandGroupOnly())
-	} else if !IsValidGroup(m.Chat.ID) {
-		app.Bot.Send(m.Chat, utility.GroupNotFound())
-	} else {
-		app.Bot.Send(m.Chat, SaveCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
 	}
+
+	app.Bot.Send(m.Chat, SaveCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
 }
 
 func ListCommand(m *tb.Message) {
-	if m.Private() {
-		app.Bot.Send(m.Chat, utility.CommandGroupOnly())
-	} else if !IsValidGroup(m.Chat.ID) {
-		app.Bot.Send(m.Chat, utility.GroupNotFound())
-	} else {
-		app.Bot.Send(m.Chat, ListCustomCommandGroup(m.Chat.ID, m.Sender.Username))
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
 	}
+
+	app.Bot.Send(m.Chat, ListCustomCommandGroup(m.Chat.ID, m.Sender.Username))
 }
 
 func UpdateCommand(m *tb.Message) {
-	if m.Private() {
-		app.Bot.Send(m.Chat, utility.CommandGroupOnly())
-	} else if !IsValidGroup(m.Chat.ID) {
-		app.Bot.Send(m.Chat, utility.GroupNotFound())
-	} else {
-		app.Bot.Send(m.Chat, UpdateCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
 	}
+
+	app.Bot.Send(m.Chat, UpdateCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
 }
 
 func DeleteCommand(m *tb.Message) {
-	if m.Private() {
-		app.Bot.Send(m.Chat, utility.CommandGroupOnly())
-	} else if !IsValidGroup(m.Chat.ID) {
-		app.Bot.Send(m.Chat, utility.GroupNotFound())
-	} else {
-		app.Bot.Send(m.Chat, DeleteCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
 	}
+
+	app.Bot.Send(m.Chat, DeleteCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
 }
 
 func RespondAllText(m *tb.Message) {
