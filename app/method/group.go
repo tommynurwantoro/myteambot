@@ -13,11 +13,7 @@ func AddGroup(chatID int64, name string) {
 }
 
 // SendChatSpecificGroup _
-func SendChatToSpecificGroup(username, args string) (string, string) {
-	if !repository.IsUserEligible(username) {
-		return "", utility.UserNotEligible()
-	}
-
+func SendChatToSpecificGroup(args string) (string, string) {
 	if args == "" {
 		return "", utility.InvalidParameter()
 	}

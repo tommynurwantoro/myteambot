@@ -144,7 +144,12 @@ func GreetNewJoinedUser(m *tb.Message) {
 }
 
 func SendCustomChat(m *tb.Message) {
-	chatID, response := SendChatToSpecificGroup(m.Sender.Username, m.Payload)
+	if !repository.IsAdmin(m.Sender.Username) {
+		app.Bot.Send(m.Chat, utility.UserNotEligible())
+		return
+	}
+
+	chatID, response := SendChatToSpecificGroup(m.Payload)
 	if chatID != "" {
 		intChatID, err := strconv.ParseInt(chatID, 10, 64)
 		if err != nil {
