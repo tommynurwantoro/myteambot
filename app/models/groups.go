@@ -79,8 +79,8 @@ type groupL struct{}
 
 var (
 	groupColumns               = []string{"id", "chat_id", "name"}
-	groupColumnsWithoutDefault = []string{"id", "chat_id", "name"}
-	groupColumnsWithDefault    = []string{}
+	groupColumnsWithoutDefault = []string{"chat_id", "name"}
+	groupColumnsWithDefault    = []string{"id"}
 	groupPrimaryKeyColumns     = []string{"id"}
 )
 
@@ -444,15 +444,26 @@ func (o *Group) Insert(exec boil.Executor, columns boil.Columns) error {
 		fmt.Fprintln(boil.DebugWriter, vals)
 	}
 
-	_, err = exec.Exec(cache.query, vals...)
+	result, err := exec.Exec(cache.query, vals...)
 
 	if err != nil {
 		return errors.Wrap(err, "models: unable to insert into groups")
 	}
 
+	var lastID int64
 	var identifierCols []interface{}
 
 	if len(cache.retMapping) == 0 {
+		goto CacheNoHooks
+	}
+
+	lastID, err = result.LastInsertId()
+	if err != nil {
+		return ErrSyncFail
+	}
+
+	o.ID = uint(lastID)
+	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == groupMapping["ID"] {
 		goto CacheNoHooks
 	}
 
@@ -712,16 +723,27 @@ func (o *Group) Upsert(exec boil.Executor, updateColumns, insertColumns boil.Col
 		fmt.Fprintln(boil.DebugWriter, vals)
 	}
 
-	_, err = exec.Exec(cache.query, vals...)
+	result, err := exec.Exec(cache.query, vals...)
 
 	if err != nil {
 		return errors.Wrap(err, "models: unable to upsert for groups")
 	}
 
+	var lastID int64
 	var uniqueMap []uint64
 	var nzUniqueCols []interface{}
 
 	if len(cache.retMapping) == 0 {
+		goto CacheNoHooks
+	}
+
+	lastID, err = result.LastInsertId()
+	if err != nil {
+		return ErrSyncFail
+	}
+
+	o.ID = uint(lastID)
+	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == groupMapping["id"] {
 		goto CacheNoHooks
 	}
 
