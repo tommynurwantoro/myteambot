@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/bot/myteambot/app/models"
@@ -11,8 +12,8 @@ import (
 )
 
 // GetAllNeedReview _
-func GetAllNeedReview(groupID int) []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_done = ? AND users != '' AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
+func GetAllNeedReview(groupID int64) []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_reviewed = ? AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -21,8 +22,8 @@ func GetAllNeedReview(groupID int) []*models.Review {
 }
 
 // GetAllNeedQA _
-func GetAllNeedQA(groupID int) []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_done = ? AND users = '' AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
+func GetAllNeedQA(groupID int64) []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_reviewed = ? AND is_tested = ? AND group_id = ?", true, false, groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,8 +32,8 @@ func GetAllNeedQA(groupID int) []*models.Review {
 }
 
 // GetAllDone _
-func GetAllDone(groupID int) []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_done = ? AND group_id = ?", true, groupID), qm.OrderBy("created_at")).AllG()
+func GetAllDone(groupID int64) []*models.Review {
+	reviews, err := models.Reviews(qm.Where("is_tested = ? AND group_id = ?", true, groupID), qm.OrderBy("created_at"), qm.Limit(10)).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,11 +42,12 @@ func GetAllDone(groupID int) []*models.Review {
 }
 
 // InsertReview _
-func InsertReview(title, url, users string, groupID int) {
+func InsertReview(title, url, users string, groupID int64) {
 	var review models.Review
 
 	review.URL = url
-	review.IsDone = false
+	review.IsReviewed = false
+	review.IsTested = false
 	review.Title = title
 	review.Users = users
 	review.GroupID = groupID
@@ -63,7 +65,8 @@ func UpdateReview(ID uint, title, url, users string) {
 	}
 
 	review.URL = url
-	review.IsDone = false
+	review.IsReviewed = false
+	review.IsTested = false
 	review.Title = title
 	review.Users = users
 
@@ -74,21 +77,37 @@ func UpdateReview(ID uint, title, url, users string) {
 }
 
 // UpdateToDoneReview _
-func UpdateToDoneReview(sequence int, groupID int, user string, force bool) bool {
+func UpdateToDoneReview(sequences []string, groupID int64, user string, force bool) bool {
 	reviews := GetAllNeedReview(groupID)
+	successToUpdate := false
 
-	for i, review := range reviews {
-		if i == sequence-1 {
-			if force {
-				review.Users = ""
-			} else {
-				review.Users = removeAvailableUsers(review.Users, user)
-			}
+	for _, seq := range sequences {
+		sequence, err := strconv.Atoi(seq)
+		if err != nil {
+			continue
+		}
 
-			err := review.UpdateG(boil.Infer())
-			if err != nil {
-				panic(err)
+		for i, review := range reviews {
+			if i == sequence-1 {
+				if force {
+					review.Users = ""
+				} else {
+					review.Users = removeAvailableUsers(review.Users, user)
+				}
+
+				err := review.UpdateG(boil.Infer())
+				if err != nil {
+					panic(err)
+				}
+
+				successToUpdate = true
+				break
 			}
+		}
+	}
+
+	return successToUpdate
+}
 
 func UpdateToReadyQA(sequences []string, groupID int64) bool {
 	reviews := GetAllNeedReview(groupID)
@@ -118,23 +137,32 @@ func UpdateToReadyQA(sequences []string, groupID int64) bool {
 	return successToUpdate
 }
 
-func UpdateToDoneQA(sequence int, groupID int) bool {
+func UpdateToDoneQA(sequences []string, groupID int64) bool {
 	reviews := GetAllNeedQA(groupID)
+	successToUpdate := false
 
-	for i, review := range reviews {
-		if i == sequence-1 {
-			review.IsDone = true
+	for _, seq := range sequences {
+		sequence, err := strconv.Atoi(seq)
+		if err != nil {
+			continue
+		}
 
-			err := review.UpdateG(boil.Infer())
-			if err != nil {
-				panic(err)
+		for i, review := range reviews {
+			if i == sequence-1 {
+				review.IsTested = true
+
+				err := review.UpdateG(boil.Infer())
+				if err != nil {
+					panic(err)
+				}
+
+				successToUpdate = true
+				break
 			}
-
-			return true
 		}
 	}
 
-	return false
+	return successToUpdate
 }
 
 func removeAvailableUsers(users, deleteUser string) string {

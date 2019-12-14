@@ -10,14 +10,8 @@ import (
 )
 
 // GetReviewQueue _
-func GetReviewQueue(username string) string {
-	if !repository.IsUserEligible(username) {
-		return utility.UserNotEligible()
-	}
-
-	user := repository.FindUserByUsername(username)
-
-	reviews := repository.GetAllNeedReview(user.GroupID)
+func GetReviewQueue(groupID int64) string {
+	reviews := repository.GetAllNeedReview(groupID)
 
 	if len(reviews) == 0 {
 		return "Gak ada antrian review nih 👍🏻"
@@ -27,14 +21,8 @@ func GetReviewQueue(username string) string {
 }
 
 // GetQAQueue _
-func GetQAQueue(username string) string {
-	if !repository.IsUserEligible(username) {
-		return utility.UserNotEligible()
-	}
-
-	user := repository.FindUserByUsername(username)
-
-	reviews := repository.GetAllNeedQA(user.GroupID)
+func GetQAQueue(groupID int64) string {
+	reviews := repository.GetAllNeedQA(groupID)
 
 	if len(reviews) == 0 {
 		return "Gak ada antrian QA nih 👍🏻"
@@ -44,16 +32,10 @@ func GetQAQueue(username string) string {
 }
 
 // AddReview _
-func AddReview(username, args string) string {
-	if !repository.IsUserEligible(username) {
-		return utility.UserNotEligible()
-	}
-
+func AddReview(groupID int64, args string) string {
 	if args == "" {
 		return utility.InvalidParameter()
 	}
-
-	user := repository.FindUserByUsername(username)
 
 	split := strings.Split(args, "#")
 
@@ -61,37 +43,26 @@ func AddReview(username, args string) string {
 		return utility.InvalidParameter()
 	}
 
-	repository.InsertReview(split[0], split[1], split[2], user.GroupID)
+	repository.InsertReview(split[0], split[1], split[2], groupID)
 
 	return utility.SuccessInsertData()
 }
 
 // UpdateDoneReview _
-func UpdateDoneReview(args, username string, force bool) string {
-	if !repository.IsUserEligible(username) {
-		return utility.UserNotEligible()
-	}
-
-	user := repository.FindUserByUsername(username)
-
+func UpdateDoneReview(groupID int64, username, args string, force bool) string {
 	if args == "" {
 		return utility.InvalidParameter()
 	}
 
 	sequences := strings.Split(args, " ")
-	success := false
-	updated := 0
+	success := repository.UpdateToDoneReview(sequences, groupID, fmt.Sprintf("@%s", username), force)
 
-	for _, seq := range sequences {
-		sequence, err := strconv.Atoi(seq)
-		if err != nil {
-			continue
-		}
+	if success {
+		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(groupID))
+	}
 
-		if repository.UpdateToDoneReview(sequence-updated, user.GroupID, fmt.Sprintf("@%s", username), force) {
-			updated++
-			success = true
-		}
+	return utility.InvalidSequece()
+}
 
 // UpdateReadyQA _
 func UpdateReadyQA(groupID int64, args string) string {
@@ -110,47 +81,22 @@ func UpdateReadyQA(groupID int64, args string) string {
 }
 
 // UpdateDoneQA _
-func UpdateDoneQA(args, username string) string {
-	if !repository.IsUserEligible(username) {
-		return utility.UserNotEligible()
-	}
-
-	user := repository.FindUserByUsername(username)
-
+func UpdateDoneQA(groupID int64, args string) string {
 	if args == "" {
 		return utility.InvalidParameter()
 	}
 
 	sequences := strings.Split(args, " ")
-	success := false
-	updated := 0
-
-	for _, seq := range sequences {
-		sequence, err := strconv.Atoi(seq)
-		if err != nil {
-			continue
-		}
-
-		if repository.UpdateToDoneQA(sequence-updated, user.GroupID) {
-			updated++
-			success = true
-		}
-	}
+	success := repository.UpdateToDoneQA(sequences, groupID)
 
 	if success {
-		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetQAQueue(username))
+		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetQAQueue(groupID))
 	}
 
 	return utility.InvalidSequece()
 }
 
-func AddUserReview(args, username string) string {
-	if !repository.IsUserEligible(username) {
-		return utility.UserNotEligible()
-	}
-
-	user := repository.FindUserByUsername(username)
-
+func AddUserReview(groupID int64, args string) string {
 	if args == "" {
 		return utility.InvalidParameter()
 	}
@@ -163,12 +109,12 @@ func AddUserReview(args, username string) string {
 		return utility.InvalidParameter()
 	}
 
-	reviews := repository.GetAllNeedReview(user.GroupID)
+	reviews := repository.GetAllNeedReview(groupID)
 
 	for i, review := range reviews {
 		if i+1 == sequence {
 			repository.UpdateReview(review.ID, review.Title, review.URL, fmt.Sprintf("%s %s", review.Users, split[1]))
-			return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(username))
+			return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(groupID))
 		}
 	}
 
