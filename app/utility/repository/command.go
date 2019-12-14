@@ -4,15 +4,12 @@ package repository
 start - Tentang bot ini
 help - Nampilin semua perintah yang ada
 halo - Cuma buat nyapa aja
-init_group - Initialize group ke dalam bot
-add_user - Menambah user agar dapat menggunakan bot
-retro - Bantuan untuk perintah retrospective
-result_retro - {dd-mm-yyyy} Dapetin hasil retrospective, jangan lupa kasih tanggalnya ya
 titip_review - {title#url#telegram-users} Titip review PR
 antrian_review - Nampilin semua antrian PR yang belum direview
 sudah_direview - {urutan} Ngubah antrian review untuk yang sudah direview
 sudah_direview_semua - {urutan} Ngubah antrian review untuk yang sudah direview untuk semua user
 tambah_user_review - {urutan#telegram-users} Nambahin user ke antrian review
+siap_qa - Mindahin antrian review ke antrian QA
 antrian_qa - Nampilin semua antrian PR yang belum dites
 sudah_dites - {urutan} Ngubah antrian QA untuk yang sudah dites
 simpan_command - {kata#pesan} Kalau ada pengingat dengan perintah tertentu bisa pakai command ini loh
@@ -42,6 +39,7 @@ func (c *Command) All() []Command {
 		c.SudahDireview(),
 		c.SudahDireviewSemua(),
 		c.TambahUserReview(),
+		c.SiapQA(),
 		c.AntrianQA(),
 		c.SudahDites(),
 		c.SimpanCommand(),
@@ -81,6 +79,10 @@ func (c *Command) SudahDireviewSemua() Command {
 
 func (c *Command) TambahUserReview() Command {
 	return Command{"/tambah_user_review", "{urutan#telegram-users} Nambahin user ke antrian review"}
+}
+
+func (c *Command) SiapQA() Command {
+	return Command{"/siap_qa", "{urutan} Mindahin antrian review ke antrian QA"}
 }
 
 func (c *Command) AntrianQA() Command {

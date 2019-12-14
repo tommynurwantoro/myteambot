@@ -20,6 +20,7 @@ func Init() {
 	app.Bot.Handle(command.SudahDireview().Name, SudahDireview)
 	app.Bot.Handle(command.SudahDireviewSemua().Name, SudahDireviewSemua)
 	app.Bot.Handle(command.TambahUserReview().Name, TambahUserReview)
+	app.Bot.Handle(command.SiapQA().Name, SiapQA)
 	app.Bot.Handle(command.AntrianQA().Name, AntrianQA)
 	app.Bot.Handle(command.SudahDites().Name, SudahDites)
 	app.Bot.Handle(command.SendChat().Name, SendCustomChat)
@@ -63,6 +64,17 @@ func SudahDireviewSemua(m *tb.Message) {
 
 func TambahUserReview(m *tb.Message) {
 	app.Bot.Send(m.Chat, AddUserReview(m.Payload, m.Sender.Username), tb.ModeHTML, tb.NoPreview)
+}
+
+func SiapQA(m *tb.Message) {
+	invalid := validateGroup(m)
+
+	if invalid != "" {
+		app.Bot.Send(m.Chat, invalid)
+		return
+	}
+
+	app.Bot.Send(m.Chat, UpdateReadyQA(m.Chat.ID, m.Payload), tb.ModeHTML, tb.NoPreview)
 }
 
 func AntrianQA(m *tb.Message) {
@@ -158,4 +170,14 @@ func BlastMessageToAllGroup(m *tb.Message) {
 		m.Chat.ID = group.ChatID
 		app.Bot.Send(m.Chat, m.Payload)
 	}
+}
+
+func validateGroup(m *tb.Message) string {
+	if m.Private() {
+		return utility.CommandGroupOnly()
+	} else if !IsValidGroup(m.Chat.ID) {
+		return utility.GroupNotFound()
+	}
+
+	return ""
 }

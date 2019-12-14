@@ -90,11 +90,32 @@ func UpdateToDoneReview(sequence int, groupID int, user string, force bool) bool
 				panic(err)
 			}
 
-			return true
+func UpdateToReadyQA(sequences []string, groupID int64) bool {
+	reviews := GetAllNeedReview(groupID)
+	successToUpdate := false
+
+	for _, seq := range sequences {
+		sequence, err := strconv.Atoi(seq)
+		if err != nil {
+			continue
+		}
+
+		for i, review := range reviews {
+			if i+1 == sequence {
+				review.IsReviewed = true
+
+				err := review.UpdateG(boil.Infer())
+				if err != nil {
+					panic(err)
+				}
+
+				successToUpdate = true
+				break
+			}
 		}
 	}
 
-	return false
+	return successToUpdate
 }
 
 func UpdateToDoneQA(sequence int, groupID int) bool {

@@ -92,10 +92,18 @@ func UpdateDoneReview(args, username string, force bool) string {
 			updated++
 			success = true
 		}
+
+// UpdateReadyQA _
+func UpdateReadyQA(groupID int64, args string) string {
+	if args == "" {
+		return utility.InvalidParameter()
 	}
 
+	sequences := strings.Split(args, " ")
+	success := repository.UpdateToReadyQA(sequences, groupID)
+
 	if success {
-		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(username))
+		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(groupID))
 	}
 
 	return utility.InvalidSequece()
