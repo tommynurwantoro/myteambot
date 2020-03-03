@@ -109,7 +109,7 @@ func (m *Method) RespondCustomCommand(message *tb.Message) {
 	commands := repository.GetAllCustomCommandsByGroupID(message.Chat.ID)
 	if commands != nil {
 		for _, c := range commands {
-			if strings.Contains(strings.ToLower(message.Payload), strings.ToLower(c.Command)) {
+			if strings.Contains(strings.ToLower(message.Text), strings.ToLower(c.Command)) {
 				m.Bot.Send(message.Chat, c.Message)
 				return
 			}
