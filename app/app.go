@@ -40,7 +40,7 @@ func init() {
 
 	once.Do(func() {
 		resolveMysql()
-		Redis = resolveRedis()
+		// Redis = resolveRedis()
 		Bot = resolveBot()
 	})
 }

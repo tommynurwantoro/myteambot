@@ -23,14 +23,14 @@ import (
 // Review is an object representing the database table.
 type Review struct {
 	ID         uint      `boil:"id" json:"id" toml:"id" yaml:"id"`
-	URL        string    `boil:"url" json:"url" toml:"url" yaml:"url"`
-	IsReviewed bool      `boil:"is_reviewed" json:"is_reviewed" toml:"is_reviewed" yaml:"is_reviewed"`
-	Title      string    `boil:"title" json:"title" toml:"title" yaml:"title"`
-	Users      string    `boil:"users" json:"users" toml:"users" yaml:"users"`
 	GroupID    int64     `boil:"group_id" json:"group_id" toml:"group_id" yaml:"group_id"`
+	URL        string    `boil:"url" json:"url" toml:"url" yaml:"url"`
+	Title      string    `boil:"title" json:"title" toml:"title" yaml:"title"`
+	IsReviewed bool      `boil:"is_reviewed" json:"is_reviewed" toml:"is_reviewed" yaml:"is_reviewed"`
+	IsTested   bool      `boil:"is_tested" json:"is_tested" toml:"is_tested" yaml:"is_tested"`
+	Users      string    `boil:"users" json:"users" toml:"users" yaml:"users"`
 	CreatedAt  time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt  time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
-	IsTested   bool      `boil:"is_tested" json:"is_tested" toml:"is_tested" yaml:"is_tested"`
 
 	R *reviewR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L reviewL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -38,24 +38,24 @@ type Review struct {
 
 var ReviewColumns = struct {
 	ID         string
-	URL        string
-	IsReviewed string
-	Title      string
-	Users      string
 	GroupID    string
+	URL        string
+	Title      string
+	IsReviewed string
+	IsTested   string
+	Users      string
 	CreatedAt  string
 	UpdatedAt  string
-	IsTested   string
 }{
 	ID:         "id",
-	URL:        "url",
-	IsReviewed: "is_reviewed",
-	Title:      "title",
-	Users:      "users",
 	GroupID:    "group_id",
+	URL:        "url",
+	Title:      "title",
+	IsReviewed: "is_reviewed",
+	IsTested:   "is_tested",
+	Users:      "users",
 	CreatedAt:  "created_at",
 	UpdatedAt:  "updated_at",
-	IsTested:   "is_tested",
 }
 
 // Generated where
@@ -71,24 +71,24 @@ func (w whereHelperbool) GTE(x bool) qm.QueryMod { return qmhelper.Where(w.field
 
 var ReviewWhere = struct {
 	ID         whereHelperuint
-	URL        whereHelperstring
-	IsReviewed whereHelperbool
-	Title      whereHelperstring
-	Users      whereHelperstring
 	GroupID    whereHelperint64
+	URL        whereHelperstring
+	Title      whereHelperstring
+	IsReviewed whereHelperbool
+	IsTested   whereHelperbool
+	Users      whereHelperstring
 	CreatedAt  whereHelpertime_Time
 	UpdatedAt  whereHelpertime_Time
-	IsTested   whereHelperbool
 }{
 	ID:         whereHelperuint{field: `id`},
-	URL:        whereHelperstring{field: `url`},
-	IsReviewed: whereHelperbool{field: `is_reviewed`},
-	Title:      whereHelperstring{field: `title`},
-	Users:      whereHelperstring{field: `users`},
 	GroupID:    whereHelperint64{field: `group_id`},
+	URL:        whereHelperstring{field: `url`},
+	Title:      whereHelperstring{field: `title`},
+	IsReviewed: whereHelperbool{field: `is_reviewed`},
+	IsTested:   whereHelperbool{field: `is_tested`},
+	Users:      whereHelperstring{field: `users`},
 	CreatedAt:  whereHelpertime_Time{field: `created_at`},
 	UpdatedAt:  whereHelpertime_Time{field: `updated_at`},
-	IsTested:   whereHelperbool{field: `is_tested`},
 }
 
 // ReviewRels is where relationship names are stored.
@@ -108,9 +108,9 @@ func (*reviewR) NewStruct() *reviewR {
 type reviewL struct{}
 
 var (
-	reviewColumns               = []string{"id", "url", "is_reviewed", "title", "users", "group_id", "created_at", "updated_at", "is_tested"}
-	reviewColumnsWithoutDefault = []string{"url", "is_reviewed", "title", "users", "group_id", "created_at", "updated_at"}
-	reviewColumnsWithDefault    = []string{"id", "is_tested"}
+	reviewColumns               = []string{"id", "group_id", "url", "title", "is_reviewed", "is_tested", "users", "created_at", "updated_at"}
+	reviewColumnsWithoutDefault = []string{"group_id", "url", "title", "is_reviewed", "is_tested", "users", "created_at", "updated_at"}
+	reviewColumnsWithDefault    = []string{"id"}
 	reviewPrimaryKeyColumns     = []string{"id"}
 )
 

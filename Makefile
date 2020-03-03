@@ -1,5 +1,5 @@
 dep:
-	dep ensure -v -vendor-only
+	go mod tidy
 
 pretty:
 	gofmt -s -w .

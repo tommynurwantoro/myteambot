@@ -7,95 +7,112 @@ import (
 
 	"github.com/bot/myteambot/app/utility"
 	"github.com/bot/myteambot/app/utility/repository"
+	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-func SaveCustomCommandGroup(chatID int64, username, args string) string {
-	if validation := IsValidRequest(username, args); validation != "" {
-		return validation
+// SimpanCustomCommand _
+func (m *Method) SimpanCustomCommand(message *tb.Message) {
+	if invalid := ValidateGroup(message); invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	split := strings.Split(args, "#")
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter(), tb.ModeHTML, tb.NoPreview)
+		return
+	}
+
+	split := strings.Split(message.Payload, "#")
 
 	if len(split) < 2 {
-		return utility.InvalidParameter()
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
-	group := repository.FindGroupByChatID(chatID)
+	repository.InsertCustomCommand(message.Chat.ID, split[0], split[1])
 
-	repository.InsertCustomCommand(int(group.ID), split[0], split[1])
-
-	return utility.SuccessInsertData()
+	m.Bot.Send(message.Chat, utility.SuccessInsertData())
 }
 
-func ListCustomCommandGroup(chatID int64, username string) string {
-	if validation := IsValidRequest(username, "OK"); validation != "" {
-		return validation
+// ListCustomCommand _
+func (m *Method) ListCustomCommand(message *tb.Message) {
+	if invalid := ValidateGroup(message); invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	group := repository.FindGroupByChatID(chatID)
-	customCommands := repository.GetAllCustomCommandsByGroupID(int(group.ID))
+	customCommands := repository.GetAllCustomCommandsByGroupID(message.Chat.ID)
 
 	if len(customCommands) == 0 {
-		return utility.CustomCommandNotFound()
+		m.Bot.Send(message.Chat, utility.CustomCommandNotFound())
+		return
 	}
 
-	return fmt.Sprintf("Ini list command tim kamu:\n%s", utility.GenerateCustomCommands(customCommands))
+	m.Bot.Send(message.Chat, fmt.Sprintf("Ini list command tim kamu:\n%s", utility.GenerateCustomCommands(customCommands)))
 }
 
-func UpdateCustomCommandGroup(chatID int64, username, args string) string {
-	if validation := IsValidRequest(username, args); validation != "" {
-		return validation
+// UbahCustomCommand _
+func (m *Method) UbahCustomCommand(message *tb.Message) {
+	if invalid := ValidateGroup(message); invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	split := strings.Split(args, "#")
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter(), tb.ModeHTML, tb.NoPreview)
+		return
+	}
+
+	split := strings.Split(message.Payload, "#")
 
 	if len(split) < 2 {
-		return utility.InvalidParameter()
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
 	sequence, err := strconv.Atoi(split[0])
 	if err != nil {
-		return utility.InvalidParameter()
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
-	group := repository.FindGroupByChatID(chatID)
+	repository.UpdateCustomCommand(message.Chat.ID, sequence, split[1])
 
-	repository.UpdateCustomCommand(int(group.ID), sequence, split[1])
-
-	return utility.SuccessUpdateData()
+	m.Bot.Send(message.Chat, utility.SuccessUpdateData())
 }
 
-func DeleteCustomCommandGroup(chatID int64, username, args string) string {
-	if validation := IsValidRequest(username, args); validation != "" {
-		return validation
+// HapusCustomCommand _
+func (m *Method) HapusCustomCommand(message *tb.Message) {
+	if invalid := ValidateGroup(message); invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	sequence, err := strconv.Atoi(args)
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter(), tb.ModeHTML, tb.NoPreview)
+		return
+	}
+
+	sequence, err := strconv.Atoi(message.Payload)
 	if err != nil {
-		return utility.InvalidParameter()
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
-	group := repository.FindGroupByChatID(chatID)
+	repository.DeleteCustomCommand(message.Chat.ID, sequence)
 
-	repository.DeleteCustomCommand(int(group.ID), sequence)
-
-	return utility.SuccessUpdateData()
+	m.Bot.Send(message.Chat, utility.SuccessUpdateData())
 }
 
-func RespondCustomCommandGroup(chatID int64, args string) string {
-	group := repository.FindGroupByChatID(chatID)
-	if group == nil {
-		return ""
-	}
-
-	commands := repository.GetAllCustomCommandsByGroupID(int(group.ID))
+// RespondCustomCommand _
+func (m *Method) RespondCustomCommand(message *tb.Message) {
+	commands := repository.GetAllCustomCommandsByGroupID(message.Chat.ID)
 	if commands != nil {
 		for _, c := range commands {
-			if strings.Contains(args, c.Command) {
-				return c.Message
+			if strings.Contains(strings.ToLower(message.Payload), strings.ToLower(c.Command)) {
+				m.Bot.Send(message.Chat, c.Message)
+				return
 			}
 		}
 	}
-
-	return ""
 }

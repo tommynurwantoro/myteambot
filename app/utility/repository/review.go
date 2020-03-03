@@ -58,6 +58,7 @@ func InsertReview(title, url, users string, groupID int64) {
 	}
 }
 
+// UpdateReview _
 func UpdateReview(ID uint, title, url, users string) {
 	review, err := models.Reviews(qm.Where("id = ?", ID)).OneG()
 	if err != nil && err != sql.ErrNoRows {
@@ -109,6 +110,34 @@ func UpdateToDoneReview(sequences []string, groupID int64, user string, force bo
 	return successToUpdate
 }
 
+// DeleteReview _
+func DeleteReview(sequences []string, groupID int64, user string) bool {
+	reviews := GetAllNeedReview(groupID)
+	successToDelete := false
+
+	for _, seq := range sequences {
+		sequence, err := strconv.Atoi(seq)
+		if err != nil {
+			continue
+		}
+
+		for i, review := range reviews {
+			if i == sequence-1 {
+				err := review.DeleteG()
+				if err != nil {
+					panic(err)
+				}
+
+				successToDelete = true
+				break
+			}
+		}
+	}
+
+	return successToDelete
+}
+
+// UpdateToReadyQA _
 func UpdateToReadyQA(sequences []string, groupID int64) bool {
 	reviews := GetAllNeedReview(groupID)
 	successToUpdate := false
@@ -137,6 +166,7 @@ func UpdateToReadyQA(sequences []string, groupID int64) bool {
 	return successToUpdate
 }
 
+// UpdateToDoneQA _
 func UpdateToDoneQA(sequences []string, groupID int64) bool {
 	reviews := GetAllNeedQA(groupID)
 	successToUpdate := false
@@ -164,6 +194,8 @@ func UpdateToDoneQA(sequences []string, groupID int64) bool {
 
 	return successToUpdate
 }
+
+// Private
 
 func removeAvailableUsers(users, deleteUser string) string {
 	splitUsers := strings.Split(users, " ")

@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	method.Init()
+	method := method.NewMethod(app.Bot)
+	method.InitCommand()
 
 	app.Bot.Start()
 }

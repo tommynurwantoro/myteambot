@@ -3,16 +3,19 @@ module github.com/bot/myteambot
 go 1.13
 
 require (
-	github.com/go-redis/redis v6.15.6+incompatible
-	github.com/go-sql-driver/mysql v1.4.1
-	github.com/gofrs/uuid v3.2.0+incompatible
+	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
+	github.com/friendsofgo/errors v0.9.2 // indirect
+	github.com/go-redis/redis v6.15.7+incompatible
+	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/joho/godotenv v1.3.0
-	github.com/lib/pq v1.1.1
-	github.com/pkg/errors v0.8.1
-	github.com/spf13/cast v1.3.0
-	github.com/volatiletech/inflect v0.0.0-20170731032912-e7201282ae8d
+	github.com/lib/pq v1.3.0
+	github.com/onsi/ginkgo v1.12.0 // indirect
+	github.com/onsi/gomega v1.9.0 // indirect
+	github.com/pkg/errors v0.9.1
+	github.com/spf13/cast v1.3.1 // indirect
+	github.com/volatiletech/inflect v0.0.0-20170731032912-e7201282ae8d // indirect
 	github.com/volatiletech/null v8.0.0+incompatible
-	github.com/volatiletech/sqlboiler v3.3.0+incompatible
-	google.golang.org/appengine v1.6.0
-	gopkg.in/tucnak/telebot.v2 v2.0.0-20190415090633-8c1c512262f2
+	github.com/volatiletech/sqlboiler v3.6.1+incompatible
+	gopkg.in/tucnak/telebot.v2 v2.0.0-20200301001213-9852df39ae6c
 )

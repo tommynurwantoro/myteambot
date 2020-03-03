@@ -1,241 +1,42 @@
 package method
 
 import (
-	"strconv"
-
-	"github.com/bot/myteambot/app"
-	"github.com/bot/myteambot/app/utility"
 	"github.com/bot/myteambot/app/utility/repository"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-func Init() {
+// Method _
+type Method struct {
+	Bot *tb.Bot
+}
+
+// NewMethod _
+func NewMethod(bot *tb.Bot) *Method {
+	return &Method{Bot: bot}
+}
+
+// InitCommand _
+func (m *Method) InitCommand() {
 	var command *repository.Command
 
-	app.Bot.Handle(command.Start().Name, Start)
-	app.Bot.Handle(command.Help().Name, Help)
-	app.Bot.Handle(command.Halo().Name, Halo)
-	app.Bot.Handle(command.TitipReview().Name, TitipReview)
-	app.Bot.Handle(command.AntrianReview().Name, AntrianReview)
-	app.Bot.Handle(command.SudahDireview().Name, SudahDireview)
-	app.Bot.Handle(command.SudahDireviewSemua().Name, SudahDireviewSemua)
-	app.Bot.Handle(command.TambahUserReview().Name, TambahUserReview)
-	app.Bot.Handle(command.SiapQA().Name, SiapQA)
-	app.Bot.Handle(command.AntrianQA().Name, AntrianQA)
-	app.Bot.Handle(command.SudahDites().Name, SudahDites)
-	app.Bot.Handle(command.SendChat().Name, SendCustomChat)
-	app.Bot.Handle(command.SimpanCommand().Name, SaveCommand)
-	app.Bot.Handle(command.ListCommand().Name, ListCommand)
-	app.Bot.Handle(command.UbahCommand().Name, UpdateCommand)
-	app.Bot.Handle(command.HapusCommand().Name, DeleteCommand)
-	app.Bot.Handle(command.BlastMessage().Name, BlastMessageToAllGroup)
-	app.Bot.Handle(tb.OnAddedToGroup, GreetingFromBot)
-	app.Bot.Handle(tb.OnUserJoined, GreetNewJoinedUser)
-	app.Bot.Handle(tb.OnText, RespondAllText)
-}
-
-func Start(m *tb.Message) {
-	app.Bot.Send(m.Chat, utility.Start())
-}
-
-func Help(m *tb.Message) {
-	app.Bot.Send(m.Chat, utility.Help(utility.GenerateAllCommands()))
-}
-
-func Halo(m *tb.Message) {
-	app.Bot.Send(m.Chat, utility.Halo(m.Sender.Username))
-}
-
-func TitipReview(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, AddReview(m.Chat.ID, m.Payload))
-}
-
-func AntrianReview(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, GetReviewQueue(m.Chat.ID), tb.ModeHTML, tb.NoPreview)
-}
-
-func SudahDireview(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, UpdateDoneReview(m.Chat.ID, m.Sender.Username, m.Payload, false), tb.ModeHTML, tb.NoPreview)
-}
-
-func SudahDireviewSemua(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, UpdateDoneReview(m.Chat.ID, m.Sender.Username, m.Payload, true), tb.ModeHTML, tb.NoPreview)
-}
-
-func TambahUserReview(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, AddUserReview(m.Chat.ID, m.Payload), tb.ModeHTML, tb.NoPreview)
-}
-
-func SiapQA(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, UpdateReadyQA(m.Chat.ID, m.Payload), tb.ModeHTML, tb.NoPreview)
-}
-
-func AntrianQA(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, GetQAQueue(m.Chat.ID), tb.ModeHTML, tb.NoPreview)
-}
-
-func SudahDites(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, UpdateDoneQA(m.Chat.ID, m.Payload), tb.ModeHTML, tb.NoPreview)
-}
-
-func GreetingFromBot(m *tb.Message) {
-	AddGroup(m.Chat.ID, m.Chat.Title)
-	app.Bot.Send(m.Chat, utility.GreetingFromBot())
-}
-
-func GreetNewJoinedUser(m *tb.Message) {
-	app.Bot.Send(m.Chat, utility.GreetingNewJoinedUser(m.UserJoined.Username))
-}
-
-func SendCustomChat(m *tb.Message) {
-	if !repository.IsAdmin(m.Sender.Username) {
-		app.Bot.Send(m.Chat, utility.UserNotEligible())
-		return
-	}
-
-	chatID, response := SendChatToSpecificGroup(m.Payload)
-	if chatID != "" {
-		intChatID, err := strconv.ParseInt(chatID, 10, 64)
-		if err != nil {
-			app.Bot.Send(m.Chat, utility.InvalidParameter())
-			return
-		}
-		m.Chat.ID = intChatID
-	}
-	app.Bot.Send(m.Chat, response)
-}
-
-func SaveCommand(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, SaveCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
-}
-
-func ListCommand(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, ListCustomCommandGroup(m.Chat.ID, m.Sender.Username))
-}
-
-func UpdateCommand(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, UpdateCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
-}
-
-func DeleteCommand(m *tb.Message) {
-	invalid := validateGroup(m)
-
-	if invalid != "" {
-		app.Bot.Send(m.Chat, invalid)
-		return
-	}
-
-	app.Bot.Send(m.Chat, DeleteCustomCommandGroup(m.Chat.ID, m.Sender.Username, m.Payload))
-}
-
-func RespondAllText(m *tb.Message) {
-	respond := RespondCustomCommandGroup(m.Chat.ID, m.Text)
-	if respond != "" {
-		app.Bot.Send(m.Chat, respond)
-	}
-}
-
-func BlastMessageToAllGroup(m *tb.Message) {
-	if !repository.IsAdmin(m.Sender.Username) {
-		app.Bot.Send(m.Chat, utility.UserNotEligible())
-		return
-	}
-
-	if m.Payload == "" {
-		app.Bot.Send(m.Chat, utility.InvalidParameter())
-		return
-	}
-
-	allGroups := repository.GetAllGroups()
-	for _, group := range allGroups {
-		m.Chat.ID = group.ChatID
-		app.Bot.Send(m.Chat, m.Payload)
-	}
-}
-
-func validateGroup(m *tb.Message) string {
-	if m.Private() {
-		return utility.CommandGroupOnly()
-	} else if !IsValidGroup(m.Chat.ID) {
-		return utility.GroupNotFound()
-	}
-
-	return ""
+	m.Bot.Handle(command.Start().Name, m.Start)
+	m.Bot.Handle(command.Help().Name, m.Help)
+	m.Bot.Handle(command.Halo().Name, m.Halo)
+	m.Bot.Handle(command.TitipReview().Name, m.TitipReview)
+	m.Bot.Handle(command.AntrianReview().Name, m.AntrianReview)
+	m.Bot.Handle(command.SudahDireview().Name, m.SudahDireview)
+	m.Bot.Handle(command.SudahDireviewSemua().Name, m.SudahDireviewSemua)
+	m.Bot.Handle(command.TambahUserReview().Name, m.TambahUserReview)
+	m.Bot.Handle(command.HapusReview().Name, m.HapusReview)
+	m.Bot.Handle(command.SiapQA().Name, m.SiapQA)
+	m.Bot.Handle(command.AntrianQA().Name, m.AntrianQA)
+	m.Bot.Handle(command.SudahDites().Name, m.SudahDites)
+	m.Bot.Handle(command.SendChat().Name, m.SendCustomChat)
+	m.Bot.Handle(command.SimpanCommand().Name, m.SimpanCustomCommand)
+	m.Bot.Handle(command.ListCommand().Name, m.ListCustomCommand)
+	m.Bot.Handle(command.UbahCommand().Name, m.UbahCustomCommand)
+	m.Bot.Handle(command.HapusCommand().Name, m.HapusCustomCommand)
+	m.Bot.Handle(tb.OnAddedToGroup, m.GreetingFromBot)
+	m.Bot.Handle(tb.OnUserJoined, m.GreetNewJoinedUser)
+	m.Bot.Handle(tb.OnText, m.RespondCustomCommand)
 }

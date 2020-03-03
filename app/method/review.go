@@ -7,116 +7,236 @@ import (
 
 	"github.com/bot/myteambot/app/utility"
 	"github.com/bot/myteambot/app/utility/repository"
+	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-// GetReviewQueue _
-func GetReviewQueue(groupID int64) string {
-	reviews := repository.GetAllNeedReview(groupID)
+// TitipReview _
+func (m *Method) TitipReview(message *tb.Message) {
+	invalid := ValidateGroup(message)
 
-	if len(reviews) == 0 {
-		return "Gak ada antrian review nih 👍🏻"
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	return fmt.Sprintf("Ini antrian review tim kamu:\n%s", utility.GenerateHTMLReview(reviews))
-}
-
-// GetQAQueue _
-func GetQAQueue(groupID int64) string {
-	reviews := repository.GetAllNeedQA(groupID)
-
-	if len(reviews) == 0 {
-		return "Gak ada antrian QA nih 👍🏻"
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
-	return fmt.Sprintf("Ini antrian QA tim kamu:\n%s", utility.GenerateHTMLReview(reviews))
-}
-
-// AddReview _
-func AddReview(groupID int64, args string) string {
-	if args == "" {
-		return utility.InvalidParameter()
-	}
-
-	split := strings.Split(args, "#")
+	split := strings.Split(message.Payload, "#")
 
 	if len(split) < 3 {
-		return utility.InvalidParameter()
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
-	repository.InsertReview(split[0], split[1], split[2], groupID)
+	repository.InsertReview(split[0], split[1], split[2], message.Chat.ID)
 
-	return utility.SuccessInsertData()
+	m.Bot.Send(message.Chat, utility.SuccessInsertData())
 }
 
-// UpdateDoneReview _
-func UpdateDoneReview(groupID int64, username, args string, force bool) string {
-	if args == "" {
-		return utility.InvalidParameter()
+// AntrianReview _
+func (m *Method) AntrianReview(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	sequences := strings.Split(args, " ")
-	success := repository.UpdateToDoneReview(sequences, groupID, fmt.Sprintf("@%s", username), force)
+	reviews := repository.GetAllNeedReview(message.Chat.ID)
+
+	if len(reviews) == 0 {
+		m.Bot.Send(message.Chat, "Gak ada antrian review nih 👍🏻")
+		return
+	}
+
+	m.Bot.Send(message.Chat, fmt.Sprintf("Ini antrian review tim kamu:\n%s", utility.GenerateHTMLReview(reviews)), tb.ModeHTML, tb.NoPreview)
+}
+
+// SudahDireview _
+func (m *Method) SudahDireview(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
+	}
+
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
+	}
+
+	sequences := strings.Split(message.Payload, " ")
+	success := repository.UpdateToDoneReview(sequences, message.Chat.ID, fmt.Sprintf("@%s", message.Sender.Username), false)
 
 	if success {
-		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(groupID))
+		m.Bot.Send(message.Chat, utility.SuccessUpdateData())
+		m.AntrianReview(message)
+		return
 	}
 
-	return utility.InvalidSequece()
+	m.Bot.Send(message.Chat, utility.InvalidSequece())
 }
 
-// UpdateReadyQA _
-func UpdateReadyQA(groupID int64, args string) string {
-	if args == "" {
-		return utility.InvalidParameter()
+// SudahDireviewSemua _
+func (m *Method) SudahDireviewSemua(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	sequences := strings.Split(args, " ")
-	success := repository.UpdateToReadyQA(sequences, groupID)
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
+	}
+
+	sequences := strings.Split(message.Payload, " ")
+	success := repository.UpdateToDoneReview(sequences, message.Chat.ID, fmt.Sprintf("@%s", message.Sender.Username), true)
 
 	if success {
-		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(groupID))
+		m.Bot.Send(message.Chat, utility.SuccessUpdateData())
+		m.AntrianReview(message)
+		return
 	}
 
-	return utility.InvalidSequece()
+	m.Bot.Send(message.Chat, utility.InvalidSequece())
 }
 
-// UpdateDoneQA _
-func UpdateDoneQA(groupID int64, args string) string {
-	if args == "" {
-		return utility.InvalidParameter()
+// TambahUserReview _
+func (m *Method) TambahUserReview(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
 	}
 
-	sequences := strings.Split(args, " ")
-	success := repository.UpdateToDoneQA(sequences, groupID)
-
-	if success {
-		return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetQAQueue(groupID))
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
-	return utility.InvalidSequece()
-}
-
-func AddUserReview(groupID int64, args string) string {
-	if args == "" {
-		return utility.InvalidParameter()
-	}
-
-	split := strings.Split(args, "#")
+	split := strings.Split(message.Payload, "#")
 
 	sequence, err := strconv.Atoi(split[0])
 
 	if len(split) < 2 || err != nil {
-		return utility.InvalidParameter()
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
 	}
 
-	reviews := repository.GetAllNeedReview(groupID)
+	reviews := repository.GetAllNeedReview(message.Chat.ID)
 
 	for i, review := range reviews {
 		if i+1 == sequence {
 			repository.UpdateReview(review.ID, review.Title, review.URL, fmt.Sprintf("%s %s", review.Users, split[1]))
-			return fmt.Sprintf("%s\n%s", utility.SuccessUpdateData(), GetReviewQueue(groupID))
+			m.Bot.Send(message.Chat, utility.SuccessUpdateData())
+			m.AntrianReview(message)
+			return
 		}
 	}
 
-	return utility.InvalidSequece()
+	m.Bot.Send(message.Chat, utility.InvalidSequece())
+}
+
+// HapusReview _
+func (m *Method) HapusReview(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
+	}
+
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter())
+		return
+	}
+
+	sequences := strings.Split(message.Payload, " ")
+	success := repository.DeleteReview(sequences, message.Chat.ID, fmt.Sprintf("@%s", message.Sender.Username))
+
+	if success {
+		m.Bot.Send(message.Chat, utility.SuccessUpdateData())
+		m.AntrianReview(message)
+		return
+	}
+
+	m.Bot.Send(message.Chat, utility.InvalidSequece())
+}
+
+// SiapQA _
+func (m *Method) SiapQA(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
+	}
+
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter(), tb.ModeHTML, tb.NoPreview)
+		return
+	}
+
+	sequences := strings.Split(message.Payload, " ")
+	success := repository.UpdateToReadyQA(sequences, message.Chat.ID)
+
+	if success {
+		m.Bot.Send(message.Chat, utility.SuccessUpdateData(), tb.ModeHTML, tb.NoPreview)
+		m.AntrianReview(message)
+		return
+	}
+
+	m.Bot.Send(message.Chat, utility.InvalidSequece(), tb.ModeHTML, tb.NoPreview)
+}
+
+// AntrianQA _
+func (m *Method) AntrianQA(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
+	}
+
+	reviews := repository.GetAllNeedQA(message.Chat.ID)
+
+	if len(reviews) == 0 {
+		m.Bot.Send(message.Chat, "Gak ada antrian QA nih 👍🏻", tb.ModeHTML, tb.NoPreview)
+		return
+	}
+
+	m.Bot.Send(message.Chat, fmt.Sprintf("Ini antrian QA tim kamu:\n%s", utility.GenerateHTMLReview(reviews)), tb.ModeHTML, tb.NoPreview)
+}
+
+// SudahDites _
+func (m *Method) SudahDites(message *tb.Message) {
+	invalid := ValidateGroup(message)
+
+	if invalid != "" {
+		m.Bot.Send(message.Chat, invalid)
+		return
+	}
+
+	if message.Payload == "" {
+		m.Bot.Send(message.Chat, utility.InvalidParameter(), tb.ModeHTML, tb.NoPreview)
+		return
+	}
+
+	sequences := strings.Split(message.Payload, " ")
+	success := repository.UpdateToDoneQA(sequences, message.Chat.ID)
+
+	if success {
+		m.Bot.Send(message.Chat, utility.SuccessUpdateData(), tb.ModeHTML, tb.NoPreview)
+		m.AntrianQA(message)
+		return
+	}
+
+	m.Bot.Send(message.Chat, utility.InvalidSequece(), tb.ModeHTML, tb.NoPreview)
 }

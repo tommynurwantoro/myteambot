@@ -2,26 +2,14 @@ package method
 
 import (
 	"github.com/bot/myteambot/app/utility"
-	"github.com/bot/myteambot/app/utility/repository"
+	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-func IsValidRequest(username, args string) string {
-	if !repository.IsUserEligible(username) {
-		return utility.UserNotEligible()
-	}
-
-	if args == "" {
-		return utility.InvalidParameter()
+// ValidateGroup _
+func ValidateGroup(message *tb.Message) string {
+	if message.Private() {
+		return utility.CommandGroupOnly()
 	}
 
 	return ""
-}
-
-func IsValidGroup(chatID int64) bool {
-	group := repository.FindGroupByChatID(chatID)
-	if group == nil {
-		return false
-	}
-
-	return true
 }

@@ -3,25 +3,10 @@ package utility
 import (
 	"bytes"
 	"fmt"
-	"regexp"
-	"strings"
 
 	"github.com/bot/myteambot/app/models"
 	"github.com/bot/myteambot/app/utility/repository"
 )
-
-// GetUsernames _
-func GetUsernames(usernames string) []string {
-	arr := strings.Split(usernames, " ")
-	newArr := make([]string, len(arr))
-	reg, _ := regexp.Compile("[^0-9A-Za-z_]+")
-	for i, username := range arr {
-		username := reg.ReplaceAllString(username, "")
-		newArr[i] = username
-	}
-
-	return newArr
-}
 
 // GenerateHTMLReview _
 func GenerateHTMLReview(reviews []*models.Review) string {
@@ -49,6 +34,7 @@ func GenerateAllCommands() string {
 	return buffer.String()
 }
 
+// GenerateCustomCommands _
 func GenerateCustomCommands(commands []*models.CustomCommand) string {
 	var buffer bytes.Buffer
 

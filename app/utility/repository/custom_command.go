@@ -9,7 +9,8 @@ import (
 	"github.com/volatiletech/sqlboiler/queries/qm"
 )
 
-func FindCutomCommand(commandID int64) *models.CustomCommand {
+// FindCustomCommand _
+func FindCustomCommand(commandID int64) *models.CustomCommand {
 	command, err := models.CustomCommands(qm.Where("id = ?", commandID)).OneG()
 	if err != nil && err != sql.ErrNoRows {
 		log.Fatal(err)
@@ -18,7 +19,8 @@ func FindCutomCommand(commandID int64) *models.CustomCommand {
 	return command
 }
 
-func GetAllCustomCommandsByGroupID(groupID int) []*models.CustomCommand {
+// GetAllCustomCommandsByGroupID _
+func GetAllCustomCommandsByGroupID(groupID int64) []*models.CustomCommand {
 	commands, err := models.CustomCommands(qm.Where("group_id = ?", groupID), qm.OrderBy("created_at")).AllG()
 	if err != nil && err != sql.ErrNoRows {
 		log.Fatal(err)
@@ -27,7 +29,8 @@ func GetAllCustomCommandsByGroupID(groupID int) []*models.CustomCommand {
 	return commands
 }
 
-func InsertCustomCommand(groupID int, com, message string) {
+// InsertCustomCommand _
+func InsertCustomCommand(groupID int64, com, message string) {
 	var command models.CustomCommand
 	command.GroupID = groupID
 	command.Command = com
@@ -39,7 +42,8 @@ func InsertCustomCommand(groupID int, com, message string) {
 	}
 }
 
-func UpdateCustomCommand(groupID int, sequence int, message string) {
+// UpdateCustomCommand _
+func UpdateCustomCommand(groupID int64, sequence int, message string) {
 	commands := GetAllCustomCommandsByGroupID(groupID)
 
 	for i, c := range commands {
@@ -50,7 +54,8 @@ func UpdateCustomCommand(groupID int, sequence int, message string) {
 	}
 }
 
-func DeleteCustomCommand(groupID int, sequence int) {
+// DeleteCustomCommand _
+func DeleteCustomCommand(groupID int64, sequence int) {
 	commands := GetAllCustomCommandsByGroupID(groupID)
 
 	for i, c := range commands {
