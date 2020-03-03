@@ -1,5 +1,4 @@
 .env
-db/config.yml
 vendor/*
 tbot
 tmp
