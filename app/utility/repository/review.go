@@ -13,7 +13,7 @@ import (
 
 // GetAllNeedReview _
 func GetAllNeedReview(groupID int64) []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_reviewed = ? AND group_id = ?", false, groupID), qm.OrderBy("created_at")).AllG()
+	reviews, err := models.Reviews(qm.Where("is_reviewed = ? AND group_id = ?", false, groupID), qm.OrderBy("created_at"), qm.Limit(30)).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func GetAllNeedReview(groupID int64) []*models.Review {
 
 // GetAllNeedQA _
 func GetAllNeedQA(groupID int64) []*models.Review {
-	reviews, err := models.Reviews(qm.Where("is_reviewed = ? AND is_tested = ? AND group_id = ?", true, false, groupID), qm.OrderBy("created_at")).AllG()
+	reviews, err := models.Reviews(qm.Where("is_reviewed = ? AND is_tested = ? AND group_id = ?", true, false, groupID), qm.OrderBy("created_at"), qm.Limit(30)).AllG()
 	if err != nil {
 		log.Fatal(err)
 	}
